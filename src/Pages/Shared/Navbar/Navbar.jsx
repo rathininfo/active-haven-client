@@ -144,7 +144,7 @@ const Navbar = () => {
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="text-sm text-red-600 hover:text-red-500 w-full text-left"
+                  className="text-sm text-red-600 hover:text-red-500 w-full text-left font-bold"
                 >
                   Logout
                 </button>
