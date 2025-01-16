@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../../assets/ActiveHaven.png";
+import { AuthContext } from "../../../Providers/AuthProvider";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
-  const user = {
-    name: "Rathindra Nath Biswas",
-    email: "rathininfo7@gmail.com",
-  };
+  const { user } = useContext(AuthContext);
 
   const handleLogout = () => {
     console.log("clicked");
