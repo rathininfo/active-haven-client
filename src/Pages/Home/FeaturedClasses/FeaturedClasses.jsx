@@ -50,7 +50,7 @@ const FeaturedClasses = () => {
           {classes.map((classItem, index) => (
             <div
               key={index}
-              className="bg-gray-800 p-6 rounded-3xl shadow-md transition-all hover:scale-105 hover:shadow-xl duration-300 ease-in-out"
+              className="bg-gray-800 p-6 py-20 px-10 rounded-3xl shadow-md transition-all hover:scale-105 hover:shadow-xl duration-300 ease-in-out"
             >
               <h3 className="text-2xl font-semibold text-gray-100 mb-4">
                 {classItem.title}

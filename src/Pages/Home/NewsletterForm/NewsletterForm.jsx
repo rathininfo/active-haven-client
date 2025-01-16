@@ -31,58 +31,60 @@ const NewsletterForm = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-8 border rounded-lg shadow-lg bg-white my-8">
-      <h2 className="text-3xl font-semibold text-center mb-6">
-        Subscribe to Our Newsletter
-      </h2>
-      {isSubscribed ? (
-        <div className="text-center text-green-600">
-          <p>Thank you for subscribing! We'll keep you updated.</p>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="name" className="block text-lg font-medium">
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter your name"
-            />
+    <div className="bg-gray-900 py-10">
+      <div className="max-w-lg mx-auto p-8 border rounded-lg shadow-lg bg-white my-8">
+        <h2 className="text-3xl font-semibold text-center mb-6">
+          Subscribe to Our Newsletter
+        </h2>
+        {isSubscribed ? (
+          <div className="text-center text-green-600">
+            <p>Thank you for subscribing! We'll keep you updated.</p>
           </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="name" className="block text-lg font-medium">
+                Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your name"
+              />
+            </div>
 
-          <div>
-            <label htmlFor="email" className="block text-lg font-medium">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter your email"
-            />
-          </div>
+            <div>
+              <label htmlFor="email" className="block text-lg font-medium">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your email"
+              />
+            </div>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+            {error && <p className="text-red-500 text-sm">{error}</p>}
 
-          <div className="text-center">
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600"
-            >
-              Subscribe Now
-            </button>
-          </div>
-        </form>
-      )}
+            <div className="text-center">
+              <button
+                type="submit"
+                className="w-full bg-red-500 text-white p-3 rounded-md hover:bg-red-600"
+              >
+                Subscribe Now
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
     </div>
   );
 };

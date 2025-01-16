@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import logo from "../../../assets/ActiveHaven.png";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -22,12 +23,9 @@ const Navbar = () => {
     <nav className="bg-gray-900 text-white shadow-md sticky top-0 z-50">
       <div className="container mx-auto px-6 md:px-16 lg:px-20 py-4 flex justify-between items-center">
         {/* Website Logo */}
-        <div className="flex items-center space-x-3">
-          <div className="bg-red-600 text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold">
-            <i className="fas fa-dumbbell"></i>
-          </div>
+        <div className="flex items-center space-x-3 w-20">
           <Link to="/" className="text-2xl font-bold">
-            Fitness
+            <img className="" src={logo} alt="" />
           </Link>
         </div>
 

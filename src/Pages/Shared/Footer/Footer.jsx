@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import logo from "../../../assets/ActiveHaven.png";
 
 const Footer = () => {
   return (
@@ -8,11 +9,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           {/* Logo and About Section */}
           <div className="col-span-2">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="bg-red-600 text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold">
-                <i className="fas fa-dumbbell"></i>
-              </div>
-              <h3 className="text-2xl font-bold">Fitness</h3>
+            <div className="flex items-center space-x-3 mb-4 w-24">
+              <img src={logo} alt="" />
             </div>
             <p className="text-sm leading-relaxed">
               Our company is at the forefront of revolutionizing the fitness
