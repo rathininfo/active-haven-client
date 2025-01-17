@@ -4,7 +4,7 @@ import Swal from "sweetalert2"; // Import SweetAlert2
 import { AuthContext } from "../../Providers/AuthProvider";
 
 const Login = () => {
-  const { signIn } = useContext(AuthContext);
+  const { signIn, singInWithGoogle } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.form?.pathname || "/";
@@ -35,6 +35,15 @@ const Login = () => {
           confirmButtonText: "Try Again",
         });
       });
+  };
+
+  const handleGoogleSignIn = () => {
+    singInWithGoogle()
+      .then((result) => {
+        console.log(result.user);
+        navigate("/");
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -94,7 +103,10 @@ const Login = () => {
         </div>
 
         <div className="mt-6 flex flex-col space-y-4">
-          <button className="w-full flex items-center justify-center bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition duration-300">
+          <button
+            onClick={handleGoogleSignIn}
+            className="w-full flex items-center justify-center bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition duration-300"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 mr-2"

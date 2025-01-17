@@ -4,49 +4,51 @@ import { useContext, useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { Helmet } from "react-helmet-async";
 import { AuthContext } from "../../Providers/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
-  const { createUser, updateUserProfile } = useContext(AuthContext);
+  const { createUser, updateUserProfile, singInWithGoogle } =
+    useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = (data) => {
-    createUser(data.email, data.password)
-      .then((result) => {
-        const logUser = result.user;
-        console.log(logUser);
-        updateUserProfile(data.name, data.photoURL)
-          .then(() => {
-            console.log("user Pofile info updated");
-            reset();
-            // SweetAlert2 success alert
-            Swal.fire({
-              icon: "success",
-              title: "Registration Successful",
-              text: `Welcome, ${data.name}! Your account has been created.`,
-            });
-          })
-          .catch((error) => console.log(error));
-      })
-      .catch((error) => {
-        console.error(error);
-
-        // SweetAlert2 error alert
-        Swal.fire({
-          icon: "error",
-          title: "Registration Failed",
-          text: error.message,
-        });
-      });
+    createUser(data.email, data.password).then((result) => {
+      const logUser = result.user;
+      console.log(logUser);
+      updateUserProfile(data.name, data.photoURL)
+        .then(() => {
+          console.log("user Pofile info updated");
+          reset();
+          // SweetAlert2 success alert
+          Swal.fire({
+            icon: "success",
+            title: "Registration Successful",
+            text: `Welcome, ${data.name}! Your account has been created.`,
+          });
+          navigate("/");
+        })
+        .catch((error) => console.log(error));
+    });
   };
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
+  };
+
+  const handleGoogleSignIn = () => {
+    singInWithGoogle()
+      .then((result) => {
+        console.log(result.user);
+        navigate("/");
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -175,7 +177,7 @@ const Register = () => {
             <span className="bg-gray-300 h-px w-1/3"></span>
           </div>
 
-          <div className="mt-4 text-center">
+          <div onClick={handleGoogleSignIn} className="mt-4 text-center">
             <button className="w-full py-2 px-4 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-400 focus:outline-none focus:ring focus:ring-red-300">
               Continue with Google
             </button>
