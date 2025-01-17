@@ -4,6 +4,8 @@ import Home from "../Pages/Home/Home";
 import AllTrainers from "../Pages/AllTrainers/AllTrainers";
 import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
+import PrivateRoutes from "./PrivateRoutes";
+import Secret from "../Pages/Shared/Secret/Secret";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +19,11 @@ const router = createBrowserRouter([
 
       {
         path: "/trainers",
-        element: <AllTrainers></AllTrainers>,
+        element: (
+          <PrivateRoutes>
+            <AllTrainers></AllTrainers>
+          </PrivateRoutes>
+        ),
       },
       {
         path: "/login",

@@ -1,6 +1,7 @@
+import Swal from "sweetalert2"; // Import SweetAlert2
 import { useForm } from "react-hook-form";
 import { useContext, useState } from "react";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid"; // Import Heroicons
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { Helmet } from "react-helmet-async";
 import { AuthContext } from "../../Providers/AuthProvider";
 
@@ -11,15 +12,31 @@ const Register = () => {
     formState: { errors },
   } = useForm();
   const { createUser } = useContext(AuthContext);
-
   const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = (data) => {
-    console.log(data);
-    createUser(data.email, data.password).then((result) => {
-      const logUser = result.user;
-      console.log(logUser);
-    });
+    createUser(data.email, data.password, data.displayName, data.photoURL)
+      .then((result) => {
+        const logUser = result.user;
+        console.log(logUser);
+
+        // SweetAlert2 success alert
+        Swal.fire({
+          icon: "success",
+          title: "Registration Successful",
+          text: `Welcome, ${data.name}! Your account has been created.`,
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+
+        // SweetAlert2 error alert
+        Swal.fire({
+          icon: "error",
+          title: "Registration Failed",
+          text: error.message,
+        });
+      });
   };
 
   const togglePasswordVisibility = () => {

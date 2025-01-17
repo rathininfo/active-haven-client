@@ -1,23 +1,40 @@
-import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2"; // Import SweetAlert2
 import { AuthContext } from "../../Providers/AuthProvider";
 
 const Login = () => {
-  const [isLogin, setIsLogin] = useState(true);
   const { signIn } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.form?.pathname || "/";
 
   const handleLogin = (e) => {
     e.preventDefault();
-    const from = e.target;
-    const email = from.email.value;
-    const password = from.password.value;
-    console.log(email, password);
-    signIn(email, password).then((result) => {
-      const user = result.user;
-      console.log(user);
-    });
-    navigate("/");
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    signIn(email, password)
+      .then((result) => {
+        const user = result.user;
+        Swal.fire({
+          title: "Login Successful!",
+          text: `Welcome back, ${user.displayName || "User"}!`,
+          icon: "success",
+          confirmButtonText: "Continue",
+        }).then(() => {
+          navigate(from, { replace: true });
+        });
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "Login Failed",
+          text: error.message,
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+      });
   };
 
   return (
@@ -38,8 +55,10 @@ const Login = () => {
             <input
               type="email"
               id="email"
+              name="email"
               placeholder="Enter your email"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-green-300"
+              required
             />
           </div>
 
@@ -53,8 +72,10 @@ const Login = () => {
             <input
               type="password"
               id="password"
+              name="password"
               placeholder="Enter your password"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-green-300"
+              required
             />
           </div>
 
