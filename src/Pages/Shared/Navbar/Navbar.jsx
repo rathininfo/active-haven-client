@@ -7,10 +7,13 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
-  const { user } = useContext(AuthContext);
+  const { user, logOut } = useContext(AuthContext);
+  console.log(user);
 
   const handleLogout = () => {
-    console.log("clicked");
+    logOut()
+      .then(() => {})
+      .catch((error) => console.log(error));
   };
 
   const toggleMobileMenu = () => {

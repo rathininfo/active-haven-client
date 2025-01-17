@@ -1,17 +1,33 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../Providers/AuthProvider";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const { signIn } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const from = e.target;
+    const email = from.email.value;
+    const password = from.password.value;
+    console.log(email, password);
+    signIn(email, password).then((result) => {
+      const user = result.user;
+      console.log(user);
+    });
+    navigate("/");
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-400 via-teal-500 to-blue-600">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-600 via-gray-900 to-gray-600">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <p className="text-center text-gray-600 mt-2 font-bold text-3xl">
           Log in to continue your fitness journey.
         </p>
 
-        <form className="mt-6">
+        <form onSubmit={handleLogin} className="mt-6">
           <div className="mb-4">
             <label
               htmlFor="email"
