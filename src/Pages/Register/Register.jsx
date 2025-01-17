@@ -9,23 +9,29 @@ const Register = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
-  const { createUser } = useContext(AuthContext);
+  const { createUser, updateUserProfile } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = (data) => {
-    createUser(data.email, data.password, data.displayName, data.photoURL)
+    createUser(data.email, data.password)
       .then((result) => {
         const logUser = result.user;
         console.log(logUser);
-
-        // SweetAlert2 success alert
-        Swal.fire({
-          icon: "success",
-          title: "Registration Successful",
-          text: `Welcome, ${data.name}! Your account has been created.`,
-        });
+        updateUserProfile(data.name, data.photoURL)
+          .then(() => {
+            console.log("user Pofile info updated");
+            reset();
+            // SweetAlert2 success alert
+            Swal.fire({
+              icon: "success",
+              title: "Registration Successful",
+              text: `Welcome, ${data.name}! Your account has been created.`,
+            });
+          })
+          .catch((error) => console.log(error));
       })
       .catch((error) => {
         console.error(error);

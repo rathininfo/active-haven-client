@@ -78,11 +78,11 @@ const Navbar = () => {
               </Link>
               <div className="flex items-center space-x-3">
                 <img
-                  src={user.profilePicture || "/default-avatar.png"}
+                  src={user.photoURL || "/default-avatar.png"}
                   alt="Profile"
                   className="w-8 h-8 rounded-full"
                 />
-                <span>{user.name}</span>
+                <span>{user.displayName}</span>
               </div>
               <button
                 onClick={handleLogout}
