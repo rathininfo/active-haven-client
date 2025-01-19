@@ -6,6 +6,7 @@ import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
 import PrivateRoutes from "./PrivateRoutes";
 import Secret from "../Pages/Shared/Secret/Secret";
+import TrainersDetails from "../Pages/AllTrainers/TrainersDetails/TrainersDetails";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,14 @@ const router = createBrowserRouter([
           </PrivateRoutes>
         ),
       },
+
+      {
+        path: "/trainerDetails/:id",
+        element: <TrainersDetails></TrainersDetails>,
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/trainers/${params.id}`),
+      },
+
       {
         path: "/login",
         element: <Login></Login>,

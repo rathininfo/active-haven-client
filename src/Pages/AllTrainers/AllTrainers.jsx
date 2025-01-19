@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const AllTrainers = () => {
   const [trainers, setTrainers] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("http://localhost:5000/trainers")
@@ -75,12 +74,12 @@ const AllTrainers = () => {
                   ))}
                 </ul>
               </div>
-              <button
-                onClick={() => navigate(`/trainers/${trainer._id}`)}
+              <Link
+                to={`/trainerDetails/${trainer._id}`}
                 className="block mx-auto px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
               >
                 Know More
-              </button>
+              </Link>
             </div>
           ))}
         </div>
