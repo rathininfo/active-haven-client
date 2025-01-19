@@ -1,12 +1,14 @@
 import React from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import BeATrainer from "./BeATrainer/BeATrainer";
 
 const TrainersDetails = () => {
+  const navigate = useNavigate();
   const trainer = useLoaderData();
   console.log(trainer);
 
   const handleSlotClick = (slot) => {
-    navigate(`/book-data/${trainer.id}`, { state: { slot } });
+    navigate(`/trainerBooking/${trainer.id}`, { state: { trainer, slot } });
   };
 
   return (
@@ -40,7 +42,7 @@ const TrainersDetails = () => {
               <button
                 key={index}
                 onClick={() => handleSlotClick(slot)}
-                className="px-4 py-2 bg-blue-600 text-white font-medium rounded-md shadow hover:bg-blue-700 transition"
+                className="px-4 py-2 bg-red-600 text-white font-medium rounded-md shadow hover:bg-red-700 transition"
               >
                 {slot}
               </button>
@@ -48,6 +50,7 @@ const TrainersDetails = () => {
           </div>
         </section>
       </div>
+      <BeATrainer />
     </div>
   );
 };

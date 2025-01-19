@@ -7,6 +7,9 @@ import Register from "../Pages/Register/Register";
 import PrivateRoutes from "./PrivateRoutes";
 import Secret from "../Pages/Shared/Secret/Secret";
 import TrainersDetails from "../Pages/AllTrainers/TrainersDetails/TrainersDetails";
+import TrainerBooking from "../Pages/AllTrainers/TrainersDetails/TrainerBooking/TrainerBooking";
+import BecomeATrainer from "../Pages/AllTrainers/TrainersDetails/BeATrainer/BecomeATrainer/BecomeATrainer";
+import Payment from "../Pages/AllTrainers/TrainersDetails/TrainerBooking/Payment/Payment";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +35,28 @@ const router = createBrowserRouter([
         element: <TrainersDetails></TrainersDetails>,
         loader: ({ params }) =>
           fetch(`http://localhost:5000/trainers/${params.id}`),
+      },
+
+      {
+        path: "/trainerBooking/:id",
+        element: (
+          <PrivateRoutes>
+            <TrainerBooking></TrainerBooking>
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "/payment",
+        element: <Payment></Payment>,
+      },
+
+      {
+        path: "/become-a-trainer",
+        element: (
+          <PrivateRoutes>
+            <BecomeATrainer></BecomeATrainer>
+          </PrivateRoutes>
+        ),
       },
 
       {

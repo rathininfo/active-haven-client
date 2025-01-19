@@ -40,7 +40,7 @@ const AllTrainers = () => {
                     href={trainer.socialLinks.facebook}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800"
+                    className="text-red-600 hover:text-red-800"
                   >
                     <i className="fab fa-facebook-f"></i>
                   </a>
@@ -60,7 +60,7 @@ const AllTrainers = () => {
                     href={trainer.socialLinks.twitter}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-400 hover:text-blue-600"
+                    className="text-red-400 hover:text-red-600"
                   >
                     <i className="fab fa-twitter"></i>
                   </a>
@@ -76,7 +76,7 @@ const AllTrainers = () => {
               </div>
               <Link
                 to={`/trainerDetails/${trainer._id}`}
-                className="block mx-auto px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+                className="block mx-auto px-6 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition"
               >
                 Know More
               </Link>
