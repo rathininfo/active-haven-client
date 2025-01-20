@@ -1,10 +1,15 @@
 import React, { useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { AuthContext } from "../../../../../Providers/AuthProvider";
+import { loadStripe } from "@stripe/stripe-js";
+import CheckoutForm from "./CheckoutForm/CheckoutForm";
+import { Elements } from "@stripe/react-stripe-js";
+
+const stripePromise = loadStripe(import.meta.env.VITE_Payment_Gateway_PK); // Replace with your Stripe publishable key
 
 const Payment = () => {
   const location = useLocation();
-  const { trainer, slot, plan, price, name, email } = location.state || {};
+  const { trainer, slot, plan, price } = location.state || {};
   const { user } = useContext(AuthContext);
 
   // If required data is missing
@@ -39,12 +44,18 @@ const Payment = () => {
           <strong>Your Email:</strong> {user.email}
         </p>
       </div>
-      <button
-        onClick={() => alert("Payment processing...")}
-        className="w-full px-4 py-2 bg-blue-600 text-white font-bold rounded hover:bg-blue-700"
-      >
-        Pay ${price}
-      </button>
+
+      {/* Stripe Payment Form */}
+      <Elements stripe={stripePromise}>
+        <CheckoutForm
+          trainer={trainer}
+          slot={slot}
+          plan={plan}
+          price={price}
+          userName={user.displayName}
+          userEmail={user.email}
+        />
+      </Elements>
     </div>
   );
 };
