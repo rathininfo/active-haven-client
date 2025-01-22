@@ -10,6 +10,7 @@ import TrainersDetails from "../Pages/AllTrainers/TrainersDetails/TrainersDetail
 import TrainerBooking from "../Pages/AllTrainers/TrainersDetails/TrainerBooking/TrainerBooking";
 import BecomeATrainer from "../Pages/AllTrainers/TrainersDetails/BeATrainer/BecomeATrainer/BecomeATrainer";
 import Payment from "../Pages/AllTrainers/TrainersDetails/TrainerBooking/Payment/Payment";
+import DashBoard from "../Layout/DashBoard";
 
 const router = createBrowserRouter([
   {
@@ -58,7 +59,6 @@ const router = createBrowserRouter([
           </PrivateRoutes>
         ),
       },
-
       {
         path: "/login",
         element: <Login></Login>,
@@ -66,6 +66,41 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register></Register>,
+      },
+    ],
+  },
+
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoutes>
+        <DashBoard></DashBoard>
+      </PrivateRoutes>
+    ),
+    children: [
+      {
+        path: "/dashboard/admin",
+        element: <h1>This is </h1>,
+      },
+      {
+        path: "/dashboard/all-newsletter-subscribers",
+        element: <h1>This is </h1>,
+      },
+      {
+        path: "/dashboard/all-trainers",
+        element: <h1>This is </h1>,
+      },
+      {
+        path: "/dashboard/applied-trainer",
+        element: <h1>This is </h1>,
+      },
+      {
+        path: "/dashboard/balance",
+        element: <h1>This is </h1>,
+      },
+      {
+        path: "/dashboard/add-new-class",
+        element: <h1>This is </h1>,
       },
     ],
   },

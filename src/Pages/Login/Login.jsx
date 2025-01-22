@@ -2,8 +2,10 @@ import React, { useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2"; // Import SweetAlert2
 import { AuthContext } from "../../Providers/AuthProvider";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Login = () => {
+  const axiosPublic = useAxiosPublic();
   const { signIn, singInWithGoogle } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,6 +43,13 @@ const Login = () => {
     singInWithGoogle()
       .then((result) => {
         console.log(result.user);
+        const userInfo = {
+          email: result.user?.email,
+          name: result.user?.displayName,
+        };
+        axiosPublic.post("/users", userInfo).then((res) => {
+          console.log(res.data);
+        });
         navigate("/");
       })
       .catch((error) => console.log(error));

@@ -7,7 +7,8 @@ const MainLayout = () => {
   const location = useLocation();
   const headerFooterRemove =
     location.pathname.includes("login") ||
-    location.pathname.includes("register");
+    location.pathname.includes("register") ||
+    location.pathname.includes("dashboard");
   return (
     <div className="container mx-auto">
       {headerFooterRemove || <Navbar></Navbar>}
