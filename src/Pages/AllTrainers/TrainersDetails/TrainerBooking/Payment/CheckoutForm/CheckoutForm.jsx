@@ -1,34 +1,58 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import useAxiosSecure from "../../../../../../hooks/useAxiosSecure";
 
-const CheckoutForm = ({ price }) => {
+const CheckoutForm = ({ trainer, slot, plan, price, userName, userEmail }) => {
+  const [clientSecret, setClientSecret] = useState("");
+  const [processing, setProcessing] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
+  const axiosSecure = useAxiosSecure();
+  console.log(price);
+
+  useEffect(() => {
+    axiosSecure
+      .post("/create-payment-intent", { price })
+
+      .then((res) => {
+        setClientSecret(res.data.clientSecret);
+      });
+  }, [axiosSecure, price]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    if (!stripe || !elements) {
-      return;
-    }
+    if (!stripe || !elements) return;
 
     const card = elements.getElement(CardElement);
+    if (!card) return;
 
-    if (card == null) {
-      return;
-    }
+    setProcessing(true);
 
-    // Create Payment Method
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: "card",
-      card,
-    });
+    try {
+      const { paymentMethod } = await stripe.createPaymentMethod({
+        type: "card",
+        card,
+      });
 
-    if (error) {
-      console.log(error.message);
-      alert("Payment failed. Please try again.");
-    } else {
-      console.log("Payment Method:", paymentMethod);
+      const { paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: paymentMethod.id,
+      });
+
+      await axiosSecure.post("/paymentData", {
+        paymentIntentId: paymentIntent.id,
+        trainer,
+        slot,
+        plan,
+        price,
+        userName,
+        userEmail,
+      });
+
+      alert("Payment successful!");
+    } catch (err) {
+      console.error("Payment error:", err.message);
+    } finally {
+      setProcessing(false);
     }
   };
 
@@ -38,9 +62,9 @@ const CheckoutForm = ({ price }) => {
       <button
         type="submit"
         className="w-full px-4 py-2 bg-blue-600 text-white font-bold rounded"
-        disabled={!stripe}
+        disabled={!stripe || !elements || !clientSecret || processing}
       >
-        Pay ${price}
+        {processing ? "Processing..." : `Pay $${price}`}
       </button>
     </form>
   );

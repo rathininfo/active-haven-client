@@ -1,9 +1,13 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import useAuth from "../../../../hooks/useAuth";
+import axios from "axios";
 
 const TrainerBooking = () => {
+  const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+
   const { trainer, slot } = location.state || {}; // Destructure trainer and slot from state
 
   // If state is missing or invalid, show an error message
@@ -24,9 +28,12 @@ const TrainerBooking = () => {
       slot: slot,
       plan: plan,
       price: price,
-      name: "Your Name", // Replace with actual user data
-      email: "your.email@example.com", // Replace with actual user data
+      name: user.displayName, // Replace with actual user data
+      email: user.email, // Replace with actual user data
     };
+    axios.post("http://localhost:5000/paymentData", paymentData).then((res) => {
+      console.log(res.data);
+    });
 
     navigate("/payment", { state: paymentData });
   };

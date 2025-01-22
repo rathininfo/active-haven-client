@@ -5,8 +5,10 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { Helmet } from "react-helmet-async";
 import { AuthContext } from "../../Providers/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Register = () => {
+  const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
   const {
     register,
@@ -24,15 +26,24 @@ const Register = () => {
       console.log(logUser);
       updateUserProfile(data.name, data.photoURL)
         .then(() => {
-          console.log("user Pofile info updated");
-          reset();
-          // SweetAlert2 success alert
-          Swal.fire({
-            icon: "success",
-            title: "Registration Successful",
-            text: `Welcome, ${data.name}! Your account has been created.`,
+          //create user entry in the database
+          const userInfo = {
+            name: data.name,
+            email: data.email,
+          };
+          axiosPublic.post("/users", userInfo).then((res) => {
+            if (res.data.insertedId) {
+              console.log("user added the database");
+              reset();
+              // SweetAlert2 success alert
+              Swal.fire({
+                icon: "success",
+                title: "Registration Successful",
+                text: `Welcome, ${data.name}! Your account has been created.`,
+              });
+              navigate("/");
+            }
           });
-          navigate("/");
         })
         .catch((error) => console.log(error));
     });
