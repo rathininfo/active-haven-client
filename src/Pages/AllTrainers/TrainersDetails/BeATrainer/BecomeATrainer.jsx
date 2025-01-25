@@ -1,13 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const BeATrainer = () => {
+const BecomeATrainer = () => {
   const navigate = useNavigate();
 
   const handleBecomeTrainerClick = () => {
     navigate("/become-a-trainer"); // Redirect to the "Become a Trainer" page
   };
-
   return (
     <section className="bg-gray-100 py-10 mt-10 text-center">
       <div className="container mx-auto">
@@ -28,4 +27,4 @@ const BeATrainer = () => {
   );
 };
 
-export default BeATrainer;
+export default BecomeATrainer;

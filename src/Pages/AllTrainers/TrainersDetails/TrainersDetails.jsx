@@ -1,6 +1,6 @@
 import React from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import BeATrainer from "./BeATrainer/BeATrainer";
+import BeATrainer from "./BeATrainer/BecomeATrainer";
 
 const TrainersDetails = () => {
   const navigate = useNavigate();
@@ -24,12 +24,11 @@ const TrainersDetails = () => {
               className="w-48 h-48 object-cover rounded-full shadow-lg mb-4"
             />
             <h1 className="text-2xl font-bold mb-2">{trainer.name}</h1>
-            <p className="text-gray-700 mb-4">{trainer.description}</p>
+
+            {/* Specialization */}
             <p className="text-gray-600 font-medium">
-              <strong>Years of Experience:</strong> {trainer.yearsOfExperience}
-            </p>
-            <p className="text-gray-600 font-medium">
-              <strong>Expertise:</strong> {trainer.expertise || "Not specified"}
+              <strong>Expertise:</strong>{" "}
+              {trainer.specialization || "Not specified"}
             </p>
           </div>
         </section>

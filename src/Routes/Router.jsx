@@ -8,9 +8,12 @@ import PrivateRoutes from "./PrivateRoutes";
 import Secret from "../Pages/Shared/Secret/Secret";
 import TrainersDetails from "../Pages/AllTrainers/TrainersDetails/TrainersDetails";
 import TrainerBooking from "../Pages/AllTrainers/TrainersDetails/TrainerBooking/TrainerBooking";
-import BecomeATrainer from "../Pages/AllTrainers/TrainersDetails/BeATrainer/BecomeATrainer/BecomeATrainer";
+import BecomeATrainer from "../Pages/AllTrainers/TrainersDetails/BeATrainer/BecomeATrainer/BeATrainer";
 import Payment from "../Pages/AllTrainers/TrainersDetails/TrainerBooking/Payment/Payment";
 import DashBoard from "../Layout/DashBoard";
+import AllClasses from "../Pages/AllClasses/AllClasses";
+import ForumPage from "../Pages/Forum/Forum";
+import VotePost from "../Pages/Forum/Vote/VotePost";
 
 const router = createBrowserRouter([
   {
@@ -32,10 +35,15 @@ const router = createBrowserRouter([
       },
 
       {
+        path: "/community",
+        element: <ForumPage></ForumPage>,
+      },
+
+      {
         path: "/trainerDetails/:id",
         element: <TrainersDetails></TrainersDetails>,
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/trainers/${params.id}`),
+          fetch(`http://localhost:5000/trainersInfo/${params.id}`),
       },
 
       {
@@ -66,6 +74,10 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register></Register>,
+      },
+      {
+        path: "/allClasses",
+        element: <AllClasses></AllClasses>,
       },
     ],
   },

@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { FaFacebook, FaInstagram } from "react-icons/fa";
 
 const AllTrainers = () => {
   const [trainers, setTrainers] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/trainers")
+    fetch("http://localhost:5000/trainersInfo") // Updated to match backend route
       .then((res) => res.json())
       .then((data) => setTrainers(data))
-      .catch((error) => console.error("Error fetching trainers:", error));
+      .catch((error) => {
+        console.error("Error fetching trainers:", error);
+      });
   }, []);
+
+  console.log(trainers, "trainers");
 
   return (
     <section className="bg-white py-20">
@@ -18,6 +23,7 @@ const AllTrainers = () => {
           Meet Our Trainers
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Iterate through all trainers */}
           {trainers.map((trainer) => (
             <div
               key={trainer._id}
@@ -31,38 +37,29 @@ const AllTrainers = () => {
               <h3 className="text-2xl font-semibold text-gray-800 text-center">
                 {trainer.name}
               </h3>
-              <p className="text-center text-gray-600 mb-2">
-                {trainer.yearsOfExperience} years of experience
-              </p>
+              <p className="text-center text-gray-600 mb-2">{trainer.bio}</p>
+              <h2 className="text-center text-gray-600 mb-2 font-bold">
+                Year of Experience: {trainer.yearsOfExperience}
+              </h2>
               <div className="flex justify-center space-x-4 mb-4">
-                {trainer.socialLinks.facebook && (
+                {trainer.socialLinks?.facebook && (
                   <a
                     href={trainer.socialLinks.facebook}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-red-600 hover:text-red-800"
                   >
-                    <i className="fab fa-facebook-f"></i>
+                    <FaFacebook />
                   </a>
                 )}
-                {trainer.socialLinks.instagram && (
+                {trainer.socialLinks?.instagram && (
                   <a
                     href={trainer.socialLinks.instagram}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-pink-500 hover:text-pink-700"
+                    className="text-blue-500 hover:text-blue-700"
                   >
-                    <i className="fab fa-instagram"></i>
-                  </a>
-                )}
-                {trainer.socialLinks.twitter && (
-                  <a
-                    href={trainer.socialLinks.twitter}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-red-400 hover:text-red-600"
-                  >
-                    <i className="fab fa-twitter"></i>
+                    <FaInstagram />
                   </a>
                 )}
               </div>

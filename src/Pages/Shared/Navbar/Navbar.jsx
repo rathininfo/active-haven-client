@@ -49,7 +49,7 @@ const Navbar = () => {
             All Trainers
           </Link>
           <Link
-            to="/classes"
+            to="/allClasses"
             className={`hover:text-red-600 ${
               location.pathname === "/classes" ? "text-red-600" : ""
             }`}

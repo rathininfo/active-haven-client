@@ -15,7 +15,8 @@ const FeaturedClasses = () => {
           Featured Classes
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {classes.map((classItem) => (
+          {/* Slice the array to only include the first 6 classes */}
+          {classes.slice(0, 6).map((classItem) => (
             <div
               key={classItem._id}
               className="bg-gray-800 p-6 py-20 px-10 rounded-3xl shadow-md transition-all hover:scale-105 hover:shadow-xl duration-300 ease-in-out"

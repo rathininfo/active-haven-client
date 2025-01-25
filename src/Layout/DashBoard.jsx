@@ -1,56 +1,91 @@
-import React from "react";
-import { FaHome, FaNewspaper, FaPlusSquare } from "react-icons/fa";
 import {
-  FaHandHoldingDollar,
-  FaPeopleGroup,
-  FaPersonChalkboard,
-} from "react-icons/fa6";
-
+  FaHome,
+  FaBook,
+  FaUser,
+  FaClipboardList,
+  FaUsers,
+  FaPlusSquare,
+} from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
-import Home from "../Pages/Home/Home";
 
 const DashBoard = () => {
+  const isAdmin = true;
+  const isTrainer = false;
+  const isMember = false;
+
   return (
     <div className="flex">
       <div className="w-64 min-h-screen bg-gray-600 text-white">
         <ul className="menu p-4">
-          <li>
-            <NavLink to="/dashboard/admin">
-              <FaHome></FaHome>Admin Home
-            </NavLink>
-          </li>
+          {/* Admin Role */}
+          {isAdmin && (
+            <>
+              <li>
+                <NavLink to="/dashboard/admin">
+                  <FaHome /> Admin Home
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/all-newsletter-subscribers">
+                  <FaClipboardList /> All Newsletter Subscribers
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/all-trainers">
+                  <FaUser /> All Trainers
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/applied-trainer">
+                  <FaUser /> Applied Trainer
+                </NavLink>
+              </li>
+            </>
+          )}
 
-          <li>
-            <NavLink to="/dashboard/all-newsletter-subscribers">
-              <FaNewspaper></FaNewspaper> All Newsletter subscribers
-            </NavLink>
-          </li>
+          {/* Trainer Role */}
+          {isTrainer && (
+            <>
+              <li>
+                <NavLink to="/dashboard/manage-slots">
+                  <FaClipboardList /> Manage Slots
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/add-new-slot">
+                  <FaPlusSquare /> Add New Slot
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/add-new-forum">
+                  <FaUsers /> Add New Forum
+                </NavLink>
+              </li>
+            </>
+          )}
 
-          <li>
-            <NavLink to="/dashboard/all-trainers">
-              <FaPersonChalkboard></FaPersonChalkboard> All Trainers
-            </NavLink>
-          </li>
+          {/* Member Role */}
+          {isMember && (
+            <>
+              <li>
+                <NavLink to="/dashboard/profile">
+                  <FaUser /> Profile
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/activity-log">
+                  <FaClipboardList /> Activity Log
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/booked-trainer">
+                  <FaBook /> Booked Trainer
+                </NavLink>
+              </li>
+            </>
+          )}
 
-          <li>
-            <NavLink to="/dashboard/applied-trainer">
-              {" "}
-              <FaPeopleGroup></FaPeopleGroup> Applied Trainer
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink to="/dashboard/balance">
-              {" "}
-              <FaHandHoldingDollar></FaHandHoldingDollar> Balance
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink to="/dashboard/add-new-class">
-              <FaPlusSquare></FaPlusSquare> Add new Class
-            </NavLink>
-          </li>
+          {/* Shared Navigation */}
           <div className="divider border-t border-white"></div>
           <li>
             <NavLink to="/">Home</NavLink>
@@ -59,7 +94,7 @@ const DashBoard = () => {
       </div>
 
       <div className="flex-1">
-        <Outlet></Outlet>
+        <Outlet />
       </div>
     </div>
   );
