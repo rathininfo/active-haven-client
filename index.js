@@ -28,11 +28,32 @@ async function run() {
     const paymentDataCollection = db.collection("paymentData");
     const reviewCollection = db.collection("reviews");
     const allTrainersCollection = db.collection("allTrainers");
+    const allClassesCollection = db.collection("allClasses");
 
     // users related api
     app.post("/users", async (req, res) => {
       const user = req.body;
+      const query = { email: user.email };
+      const existingUser = await userCollection.findOne(query);
+      if (existingUser) {
+        return res.send({ message: "Use Allready exists", insertedId: null });
+      }
       const result = await userCollection.insertOne(user);
+      res.send(result);
+    });
+
+    // Example route for fetching classes with pagination (Node.js with Express)
+
+    app.get("/classesInfo", async (req, res) => {
+      const result = await allClassesCollection.find().toArray();
+      res.send(result);
+    });
+
+    app.get("/classesInfo/:id", async (req, res) => {
+      const id = req.params.id;
+      const result = await allClassesCollection.findOne({
+        _id: new ObjectId(id),
+      });
       res.send(result);
     });
 
@@ -75,49 +96,28 @@ async function run() {
 
     // GET route for reviews
     app.get("/reviews", async (req, res) => {
-      try {
-        const result = await reviewCollection.find().toArray();
-        res.send(result);
-      } catch (error) {
-        console.error(error);
-        res.status(500).send({ error: "Failed to fetch reviews" });
-      }
+      const result = await reviewCollection.find().toArray();
+      res.send(result);
     });
 
-    // All trainer Page APIs
-    app.get("/trainers/:id", async (req, res) => {
+    app.get("/trainersInfo/:id", async (req, res) => {
       const id = req.params.id;
-      try {
-        const result = await allTrainersCollection.findOne({
-          _id: new ObjectId(id),
-        });
-        res.send(result);
-      } catch (error) {
-        console.error(error);
-        res.status(500).send({ error: "Failed to fetch trainer details" });
-      }
+      const result = await allTrainersCollection.findOne({
+        _id: new ObjectId(id),
+      });
+      res.send(result);
     });
 
-    app.get("/trainers", async (req, res) => {
-      try {
-        const result = await allTrainersCollection.find().toArray();
-        res.send(result);
-      } catch (error) {
-        console.error(error);
-        res.status(500).send({ error: "Failed to fetch trainers" });
-      }
+    app.get("/trainersInfo", async (req, res) => {
+      const result = await allTrainersCollection.find().toArray();
+      res.send(result);
     });
 
     // POST route to save payment data
     app.post("/paymentData", async (req, res) => {
       const paymentData = req.body;
-      try {
-        const result = await paymentDataCollection.insertOne(paymentData);
-        res.send(result);
-      } catch (error) {
-        console.error(error);
-        res.status(500).send({ error: "Failed to save payment data" });
-      }
+      const result = await paymentDataCollection.insertOne(paymentData);
+      res.send(result);
     });
 
     // Stripe payment intent route
@@ -163,6 +163,44 @@ async function run() {
       } catch (error) {
         console.error("Error saving payment information:", error);
         res.status(500).send({ error: error.message });
+      }
+    });
+
+    app.get("/posts", async (req, res) => {
+      const { page = 1, limit = 6 } = req.query; // Defaults to page 1 and 6 posts per page
+      const skip = (page - 1) * limit;
+      const posts = await Post.find().skip(skip).limit(limit).exec();
+      const totalPosts = await Post.countDocuments();
+      res.json({ posts, totalPosts });
+    });
+
+    app.post("/posts/:postId/vote", async (req, res) => {
+      const { postId } = req.params;
+      const { voteType } = req.body; // 'upvote' or 'downvote'
+      const userId = req.user._id; // Assuming you have user authentication
+
+      const post = await Post.findById(postId);
+      if (voteType === "upvote") {
+        post.votes.upvotes += 1;
+      } else if (voteType === "downvote") {
+        post.votes.downvotes += 1;
+      }
+      await post.save();
+      res.json(post);
+    });
+
+    // POST route to save a trainer's application
+    app.post("/api/trainers", async (req, res) => {
+      const trainerData = req.body;
+      try {
+        const result = await allTrainersCollection.insertOne(trainerData);
+        res.status(201).send({
+          message: "Trainer application submitted successfully!",
+          insertedId: result.insertedId,
+        });
+      } catch (error) {
+        console.error("Error saving trainer data:", error);
+        res.status(500).send({ error: "Failed to submit application." });
       }
     });
 
