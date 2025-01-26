@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
-import { FaUsers } from "react-icons/fa";
 
 const AllUsers = () => {
   const axiosSecure = useAxiosSecure();
+
   const {
     data: users = [],
     refetch,
@@ -17,20 +17,21 @@ const AllUsers = () => {
     },
   });
 
-  const handleMakeAdmin = (user) => {
-    axiosSecure.patch(`/users/admin/${user._id}`).then((res) => {
-      console.log(res.data);
-      if (res.data.modifiedCount > 0) {
-        refetch();
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: `${user.name} is Admin Now`,
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
-    });
+  const handleRoleChange = (user, newRole) => {
+    axiosSecure
+      .patch(`/users/role/${user._id}`, { role: newRole })
+      .then((res) => {
+        if (res.data.modifiedCount > 0) {
+          refetch();
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: `${user.name}'s role updated to ${newRole}`,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
   };
 
   const handleDeleteUser = (user) => {
@@ -45,11 +46,11 @@ const AllUsers = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure.delete(`/users/${user._id}`).then((res) => {
-          if (res.data.deleteCount > 0) {
+          if (res.data.deletedCount > 0) {
             refetch();
             Swal.fire({
               title: "Deleted!",
-              text: "Your file has been deleted.",
+              text: "User has been deleted.",
               icon: "success",
             });
           }
@@ -71,10 +72,10 @@ const AllUsers = () => {
       <div>
         <div className="overflow-x-auto">
           <table className="table table-zebra">
-            {/* head */}
+            {/* Table Head */}
             <thead>
               <tr>
-                <th></th>
+                <th>#</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
@@ -88,17 +89,22 @@ const AllUsers = () => {
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>
-                    {user.role === "admin" ? (
-                      "Admin"
-                    ) : (
-                      <button onClick={() => handleMakeAdmin(user)}>
-                        <FaUsers></FaUsers>
-                      </button>
-                    )}
+                    <select
+                      value={user.role}
+                      onChange={(e) => handleRoleChange(user, e.target.value)}
+                      className="select select-bordered w-full max-w-xs"
+                    >
+                      <option value="member">Member</option>
+                      <option value="trainer">Trainer</option>
+                      <option value="admin">Admin</option>
+                    </select>
                   </td>
                   <td>
-                    <button onClick={() => handleDeleteUser(user)}>
-                      Deleted
+                    <button
+                      onClick={() => handleDeleteUser(user)}
+                      className="btn btn-error btn-sm"
+                    >
+                      Delete
                     </button>
                   </td>
                 </tr>

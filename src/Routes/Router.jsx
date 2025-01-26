@@ -15,6 +15,12 @@ import AllClasses from "../Pages/AllClasses/AllClasses";
 import ForumPage from "../Pages/Forum/Forum";
 import VotePost from "../Pages/Forum/Vote/VotePost";
 import AllUsers from "../Pages/DashBoard/AllUsers/AllUsers";
+import AppliedTrainer from "../Pages/DashBoard/AppliedTrainer/AppliedTrainer";
+import ManageSlots from "../Pages/DashBoard/ManageSlots/ManageSlots";
+import AddNewSlot from "../Pages/DashBoard/AddNewSlot/AddNewSlot";
+import AddNewForum from "../Pages/DashBoard/AddNewForum/AddNewForum";
+import AllNewsletterSubscribers from "../Pages/DashBoard/AllNewsletterSubscribers/AllNewsletterSubscribers";
+import AllTrainer from "../Pages/DashBoard/AllTrainer/AllTrainer";
 
 const router = createBrowserRouter([
   {
@@ -91,23 +97,18 @@ const router = createBrowserRouter([
       </PrivateRoutes>
     ),
     children: [
-      {
-        path: "admin",
-        element: <h1>admin</h1>,
-      },
-
       // admin routers
       {
         path: "all-newsletter-subscribers",
-        element: <h1>all-newsletter-subscribers</h1>,
+        element: <AllNewsletterSubscribers></AllNewsletterSubscribers>,
       },
       {
-        path: "all-trainers",
-        element: <h1>all-trainers</h1>,
+        path: "all-trainer",
+        element: <AllTrainer></AllTrainer>,
       },
       {
         path: "applied-trainer",
-        element: <h1>applied-trainer</h1>,
+        element: <AppliedTrainer></AppliedTrainer>,
       },
       {
         path: "balance",
@@ -121,6 +122,22 @@ const router = createBrowserRouter([
       {
         path: "allUsers",
         element: <AllUsers></AllUsers>,
+      },
+
+      // trainer routes
+      {
+        path: "manage-slots",
+        element: <ManageSlots></ManageSlots>,
+      },
+
+      {
+        path: "add-new-slot",
+        element: <AddNewSlot></AddNewSlot>,
+      },
+
+      {
+        path: "add-new-forum",
+        element: <AddNewForum></AddNewForum>,
       },
     ],
   },

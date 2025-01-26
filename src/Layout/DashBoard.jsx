@@ -8,32 +8,46 @@ import {
   FaChalkboardTeacher,
 } from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
-import UseAdmin from "../hooks/UseAdmin";
+import useUserRole from "../hooks/useUserRole";
+import useAuth from "../hooks/useAuth"; // Assuming you have a useAuth hook for user data
 
 const DashBoard = () => {
-  const [isAdmin] = UseAdmin();
-  const isTrainer = false;
-  const isMember = false;
+  const { user, isLoading: authLoading } = useAuth(); // Fetch user details
+  const [role, isLoading] = useUserRole(); // Fetch user role dynamically
+
+  if (isLoading || authLoading) {
+    return <div className="text-center mt-10">Loading Dashboard...</div>;
+  }
 
   return (
     <div className="flex">
+      {/* Sidebar */}
       <div className="w-64 min-h-screen bg-gray-600 text-white">
+        <div className="flex flex-col items-center p-4">
+          {/* Profile Section */}
+          <img
+            src={user?.photoURL || "/default-profile.png"} // Display user profile image
+            alt="Profile"
+            className="w-20 h-20 rounded-full mb-2"
+          />
+          <h2 className="text-lg font-semibold">
+            {user?.displayName || "User"}
+          </h2>
+          <p className="text-sm italic text-gray-300">{role.toUpperCase()}</p>
+        </div>
+        <div className="divider border-t border-white mb-4"></div>
+        {/* Navigation */}
         <ul className="menu p-4">
           {/* Admin Role */}
-          {isAdmin && (
+          {role === "admin" && (
             <>
-              <li>
-                <NavLink to="/dashboard/admin">
-                  <FaHome /> Admin
-                </NavLink>
-              </li>
               <li>
                 <NavLink to="/dashboard/all-newsletter-subscribers">
                   <FaClipboardList /> All Newsletter Subscribers
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/dashboard/all-trainers">
+                <NavLink to="/dashboard/all-trainer">
                   <FaChalkboardTeacher /> All Trainers
                 </NavLink>
               </li>
@@ -42,7 +56,6 @@ const DashBoard = () => {
                   <FaUser /> Applied Trainer
                 </NavLink>
               </li>
-
               <li>
                 <NavLink to="/dashboard/allUsers">
                   <FaUsers /> All Users
@@ -52,7 +65,7 @@ const DashBoard = () => {
           )}
 
           {/* Trainer Role */}
-          {isTrainer && (
+          {role === "trainer" && (
             <>
               <li>
                 <NavLink to="/dashboard/manage-slots">
@@ -73,7 +86,7 @@ const DashBoard = () => {
           )}
 
           {/* Member Role */}
-          {isMember && (
+          {role === "member" && (
             <>
               <li>
                 <NavLink to="/dashboard/profile">
@@ -101,6 +114,7 @@ const DashBoard = () => {
         </ul>
       </div>
 
+      {/* Main Content */}
       <div className="flex-1">
         <Outlet />
       </div>
