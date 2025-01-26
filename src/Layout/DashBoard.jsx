@@ -5,11 +5,13 @@ import {
   FaClipboardList,
   FaUsers,
   FaPlusSquare,
+  FaChalkboardTeacher,
 } from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
+import UseAdmin from "../hooks/UseAdmin";
 
 const DashBoard = () => {
-  const isAdmin = true;
+  const [isAdmin] = UseAdmin();
   const isTrainer = false;
   const isMember = false;
 
@@ -22,7 +24,7 @@ const DashBoard = () => {
             <>
               <li>
                 <NavLink to="/dashboard/admin">
-                  <FaHome /> Admin Home
+                  <FaHome /> Admin
                 </NavLink>
               </li>
               <li>
@@ -32,12 +34,18 @@ const DashBoard = () => {
               </li>
               <li>
                 <NavLink to="/dashboard/all-trainers">
-                  <FaUser /> All Trainers
+                  <FaChalkboardTeacher /> All Trainers
                 </NavLink>
               </li>
               <li>
                 <NavLink to="/dashboard/applied-trainer">
                   <FaUser /> Applied Trainer
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink to="/dashboard/allUsers">
+                  <FaUsers /> All Users
                 </NavLink>
               </li>
             </>

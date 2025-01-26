@@ -14,6 +14,7 @@ import DashBoard from "../Layout/DashBoard";
 import AllClasses from "../Pages/AllClasses/AllClasses";
 import ForumPage from "../Pages/Forum/Forum";
 import VotePost from "../Pages/Forum/Vote/VotePost";
+import AllUsers from "../Pages/DashBoard/AllUsers/AllUsers";
 
 const router = createBrowserRouter([
   {
@@ -91,28 +92,35 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "/dashboard/admin",
-        element: <h1>This is </h1>,
+        path: "admin",
+        element: <h1>admin</h1>,
+      },
+
+      // admin routers
+      {
+        path: "all-newsletter-subscribers",
+        element: <h1>all-newsletter-subscribers</h1>,
       },
       {
-        path: "/dashboard/all-newsletter-subscribers",
-        element: <h1>This is </h1>,
+        path: "all-trainers",
+        element: <h1>all-trainers</h1>,
       },
       {
-        path: "/dashboard/all-trainers",
-        element: <h1>This is </h1>,
+        path: "applied-trainer",
+        element: <h1>applied-trainer</h1>,
       },
       {
-        path: "/dashboard/applied-trainer",
-        element: <h1>This is </h1>,
+        path: "balance",
+        element: <h1>Balanced</h1>,
       },
       {
-        path: "/dashboard/balance",
-        element: <h1>This is </h1>,
+        path: "add-new-class",
+        element: <h1>Add New class</h1>,
       },
+
       {
-        path: "/dashboard/add-new-class",
-        element: <h1>This is </h1>,
+        path: "allUsers",
+        element: <AllUsers></AllUsers>,
       },
     ],
   },
