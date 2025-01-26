@@ -56,25 +56,98 @@ async function run() {
       });
     };
 
-    // users related api
-    app.get("/users", verifyToken, async (req, res) => {
-      const result = await userCollection.find().toArray();
-      res.send(result);
-    });
+    // use varified admin after varified token
+    const varifyAdmin = async (req, res, next) => {
+      const email = req.decoded.email;
+      const query = { email: email };
+      const user = await userCollection.findOne(query);
+      const isAdmin = user?.role === "admin";
+      if (!isAdmin) {
+        return res.status(403).send({ message: "forbidden access" });
+      }
+      next();
+    };
 
-    app.get("/users/admin/:email", verifyToken, async (req, res) => {
+    // app.get("/users/admin/:email", verifyToken, async (req, res) => {
+    //   const email = req.params.email;
+    //   if (email !== req.decoded.email) {
+    //     return res.status(403).send({ message: "unauthorized access" });
+    //   }
+    //   const query = { email: email };
+    //   const user = await userCollection.findOne(query);
+    //   let admin = false;
+    //   if (user) {
+    //     admin = user?.role === "admin";
+    //   }
+    //   res.send({ admin });
+    // });
+
+    app.get("/users/role/:email", verifyToken, async (req, res) => {
       const email = req.params.email;
+
+      // Ensure the email from the token matches the requested email
       if (email !== req.decoded.email) {
-        return res.status(403).send({ message: "unauthorized access" });
+        return res.status(403).send({ message: "Unauthorized access" });
       }
 
       const query = { email: email };
       const user = await userCollection.findOne(query);
-      let admin = false;
+
       if (user) {
-        admin = user?.role === "admin";
+        res.send({ role: user.role }); // Return the user's role
+      } else {
+        res.status(404).send({ message: "User not found" });
       }
-      res.send({ admin });
+    });
+
+    // app.patch("/users/admin/:id", async (req, res) => {
+    //   const id = req.params.id;
+    //   const filter = { _id: new ObjectId(id) };
+    //   const updatedDoc = {
+    //     $set: { role: "admin" }, // Update the 'role' field to 'admin'
+    //   };
+    //   try {
+    //     const result = await userCollection.updateOne(filter, updatedDoc);
+    //     res.send(result);
+    //   } catch (error) {
+    //     console.error("Error updating user role:", error);
+    //     res.status(500).send({ message: "Failed to update user role." });
+    //   }
+    // });
+
+    app.patch("/users/role/:id", async (req, res) => {
+      const id = req.params.id;
+      const { role } = req.body; // Role passed in the request body
+
+      // Validate that the role is one of the allowed roles
+      if (!["admin", "trainer", "member"].includes(role)) {
+        return res.status(400).send({ message: "Invalid role specified." });
+      }
+
+      const filter = { _id: new ObjectId(id) };
+      const updatedDoc = {
+        $set: { role: role }, // Dynamically set the 'role' field
+      };
+
+      try {
+        const result = await userCollection.updateOne(filter, updatedDoc);
+        if (result.modifiedCount > 0) {
+          res.send({ success: true, message: `Role updated to ${role}` });
+        } else {
+          res
+            .status(404)
+            .send({ message: "User not found or role unchanged." });
+        }
+      } catch (error) {
+        console.error("Error updating user role:", error);
+        res.status(500).send({ message: "Failed to update user role." });
+      }
+    });
+
+    // users related api
+    app.get("/users", verifyToken, varifyAdmin, async (req, res) => {
+      const result = await userCollection.find().toArray();
+      res.send(result);
     });
 
     app.post("/users", async (req, res) => {
@@ -178,6 +251,49 @@ async function run() {
 
     app.get("/trainersInfo", async (req, res) => {
       const result = await allTrainersCollection.find().toArray();
+      res.send(result);
+    });
+
+    app.put("/trainersInfo/:trainerId/updateRole", async (req, res) => {
+      const { trainerId } = req.params;
+      const { role } = req.body;
+
+      try {
+        // Validate request
+        if (!role) {
+          return res
+            .status(400)
+            .json({ message: "Role is required in the request body." });
+        }
+
+        // Check if the trainer exists
+        const trainer = await Trainer.findById(trainerId);
+        if (!trainer) {
+          return res.status(404).json({ message: "Trainer not found." });
+        }
+
+        // Update the role
+        trainer.role = role;
+        await trainer.save();
+
+        res
+          .status(200)
+          .json({ message: "Trainer role updated successfully", trainer });
+      } catch (error) {
+        console.error("Error updating trainer role:", error); // Log error details for debugging
+        res
+          .status(500)
+          .json({
+            message: "Error updating trainer role",
+            error: error.message,
+          });
+      }
+    });
+
+    // POST request to save trainer info
+    app.post("/trainersInfo", async (req, res) => {
+      const trainerData = req.body;
+      const result = await allTrainersCollection.insertOne(trainerData);
       res.send(result);
     });
 
