@@ -30,12 +30,14 @@ async function run() {
     const reviewCollection = db.collection("reviews");
     const allTrainersCollection = db.collection("allTrainers");
     const allClassesCollection = db.collection("allClasses");
+    const allPostCollection = db.collection("forums");
+    const allSlotCollection = db.collection("slots");
 
     // jwt related api
     app.post("/jwt", async (req, res) => {
       const user = req.body;
       const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "1h",
+        expiresIn: "2h",
       });
       res.send({ token });
     });
@@ -152,8 +154,6 @@ async function run() {
       const result = await userCollection.deleteOne(query);
       res.send(result);
     });
-
-    // Example route for fetching classes with pagination (Node.js with Express)
 
     app.get("/classesInfo", async (req, res) => {
       const result = await allClassesCollection.find().toArray();
@@ -318,29 +318,6 @@ async function run() {
       }
     });
 
-    app.get("/posts", async (req, res) => {
-      const { page = 1, limit = 6 } = req.query; // Defaults to page 1 and 6 posts per page
-      const skip = (page - 1) * limit;
-      const posts = await Post.find().skip(skip).limit(limit).exec();
-      const totalPosts = await Post.countDocuments();
-      res.json({ posts, totalPosts });
-    });
-
-    app.post("/posts/:postId/vote", async (req, res) => {
-      const { postId } = req.params;
-      const { voteType } = req.body; // 'upvote' or 'downvote'
-      const userId = req.user._id; // Assuming you have user authentication
-
-      const post = await Post.findById(postId);
-      if (voteType === "upvote") {
-        post.votes.upvotes += 1;
-      } else if (voteType === "downvote") {
-        post.votes.downvotes += 1;
-      }
-      await post.save();
-      res.json(post);
-    });
-
     // POST route to save a trainer's application
     app.post("/api/trainers", async (req, res) => {
       const trainerData = req.body;
@@ -356,7 +333,193 @@ async function run() {
       }
     });
 
+    // Fetch trainer information
+    app.get("/trainersInfo", async (req, res) => {
+      try {
+        const trainers = await Trainer.find();
+        res.json(trainers);
+      } catch (error) {
+        res.status(500).json({ message: "Error fetching trainers" });
+      }
+    });
+
+    // Fetch available classes
+    app.get("/classesInfo", async (req, res) => {
+      try {
+        const classes = await Class.find();
+        res.json(classes);
+      } catch (error) {
+        res.status(500).json({ message: "Error fetching classes" });
+      }
+    });
+
+    // // Add new slot
+
+    app.get("/addSlot", async (req, res) => {
+      const result = await allSlotCollection.find().toArray();
+      res.send(result);
+    });
+
+    // POST API to add a new slot
+    app.post("/addSlot", async (req, res) => {
+      try {
+        const {
+          trainerId,
+          slotName,
+          slotTime,
+          selectedDay,
+          selectedClass,
+          otherInfo,
+        } = req.body;
+
+        // Validate required fields
+        if (
+          !trainerId ||
+          !slotName ||
+          !slotTime ||
+          !selectedDay ||
+          !selectedClass
+        ) {
+          return res
+            .status(400)
+            .json({ error: "All required fields must be provided" });
+        }
+
+        // Insert the slot into the database
+        const newSlot = {
+          trainerId: new ObjectId(trainerId),
+          slotName,
+          slotTime,
+          selectedDay,
+          selectedClass: new ObjectId(selectedClass),
+          otherInfo: otherInfo || null,
+          createdAt: new Date(),
+        };
+
+        const result = await db.collection("slots").insertOne(newSlot);
+
+        if (result.acknowledged) {
+          res.status(201).json({
+            message: "Slot added successfully!",
+            slotId: result.insertedId,
+          });
+        } else {
+          res
+            .status(500)
+            .json({ error: "Failed to add the slot. Please try again." });
+        }
+      } catch (error) {
+        console.error("Error adding slot:", error);
+        res
+          .status(500)
+          .json({ error: "An error occurred while adding the slot." });
+      }
+    });
+
+    // Upvote API
+    app.post("/forums/upvote", verifyToken, async (req, res) => {
+      const { postId } = req.body;
+      const userId = req.decoded._id; // Get the user ID from the JWT payload
+
+      try {
+        const post = await allPostCollection.findOne({
+          _id: new ObjectId(postId),
+        });
+        if (!post) {
+          return res
+            .status(404)
+            .json({ success: false, message: "Post not found" });
+        }
+
+        // Check if the user has already voted
+        const existingVote = post.votes.find(
+          (vote) => vote.userId.toString() === userId
+        );
+        if (existingVote) {
+          return res.status(400).json({
+            success: false,
+            message: "You have already voted on this post",
+          });
+        }
+
+        // Add upvote to the post
+        await allPostCollection.updateOne(
+          { _id: new ObjectId(postId) },
+          {
+            $inc: { upvotes: 1 },
+            $push: { votes: { userId, voteType: "up" } }, // Add the user's vote to the votes array
+          }
+        );
+
+        const updatedPost = await allPostCollection.findOne({
+          _id: new ObjectId(postId),
+        });
+        res.json({
+          success: true,
+          upvotes: updatedPost.upvotes,
+          downvotes: updatedPost.downvotes,
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Server error" });
+      }
+    });
+
+    // Downvote API
+    app.post("/forums/downvote", verifyToken, async (req, res) => {
+      const { postId } = req.body;
+      const userId = req.decoded._id; // Get the user ID from the JWT payload
+
+      try {
+        const post = await allPostCollection.findOne({
+          _id: new ObjectId(postId),
+        });
+        if (!post) {
+          return res
+            .status(404)
+            .json({ success: false, message: "Post not found" });
+        }
+
+        // Check if the user has already voted (upvoted or downvoted)
+        const existingVote = post.votes.find(
+          (vote) => vote.userId.toString() === userId
+        );
+        if (existingVote) {
+          return res.status(400).json({
+            success: false,
+            message: "You have already voted on this post",
+          });
+        }
+
+        // Add downvote to the post
+        await allPostCollection.updateOne(
+          { _id: new ObjectId(postId) },
+          {
+            $inc: { downvotes: 1 }, // Increment downvote count
+            $push: { votes: { userId, voteType: "down" } }, // Add the user's downvote to the votes array
+          }
+        );
+
+        const updatedPost = await allPostCollection.findOne({
+          _id: new ObjectId(postId),
+        });
+        res.json({
+          success: true,
+          upvotes: updatedPost.upvotes,
+          downvotes: updatedPost.downvotes,
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Server error" });
+      }
+    });
+
     // forums related api
+    app.get("/forums", async (req, res) => {
+      const result = await allPostCollection.find().toArray();
+      res.send(result);
+    });
+
     // POST Route to Add a Forum
     app.post("/forums", async (req, res) => {
       const { title, content, author, createdAt } = req.body;
