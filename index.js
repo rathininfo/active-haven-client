@@ -67,21 +67,6 @@ async function run() {
       }
       next();
     };
-
-    // app.get("/users/admin/:email", verifyToken, async (req, res) => {
-    //   const email = req.params.email;
-    //   if (email !== req.decoded.email) {
-    //     return res.status(403).send({ message: "unauthorized access" });
-    //   }
-    //   const query = { email: email };
-    //   const user = await userCollection.findOne(query);
-    //   let admin = false;
-    //   if (user) {
-    //     admin = user?.role === "admin";
-    //   }
-    //   res.send({ admin });
-    // });
-
     app.get("/users/role/:email", verifyToken, async (req, res) => {
       const email = req.params.email;
 
@@ -99,21 +84,6 @@ async function run() {
         res.status(404).send({ message: "User not found" });
       }
     });
-
-    // app.patch("/users/admin/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const filter = { _id: new ObjectId(id) };
-    //   const updatedDoc = {
-    //     $set: { role: "admin" }, // Update the 'role' field to 'admin'
-    //   };
-    //   try {
-    //     const result = await userCollection.updateOne(filter, updatedDoc);
-    //     res.send(result);
-    //   } catch (error) {
-    //     console.error("Error updating user role:", error);
-    //     res.status(500).send({ message: "Failed to update user role." });
-    //   }
-    // });
 
     app.patch("/users/role/:id", async (req, res) => {
       const id = req.params.id;
@@ -281,12 +251,10 @@ async function run() {
           .json({ message: "Trainer role updated successfully", trainer });
       } catch (error) {
         console.error("Error updating trainer role:", error); // Log error details for debugging
-        res
-          .status(500)
-          .json({
-            message: "Error updating trainer role",
-            error: error.message,
-          });
+        res.status(500).json({
+          message: "Error updating trainer role",
+          error: error.message,
+        });
       }
     });
 
@@ -386,6 +354,27 @@ async function run() {
         console.error("Error saving trainer data:", error);
         res.status(500).send({ error: "Failed to submit application." });
       }
+    });
+
+    // forums related api
+    // POST Route to Add a Forum
+    app.post("/forums", async (req, res) => {
+      const { title, content, author, createdAt } = req.body;
+      // Validate required fields
+      if (!title || !content || !author) {
+        return res.status(400).json({ error: "All fields are required" });
+      }
+      // Insert forum into MongoDB
+      const result = await db.collection("forums").insertOne({
+        title,
+        content,
+        author,
+        createdAt: createdAt || new Date().toISOString(),
+      });
+      res.status(201).json({
+        message: "Forum added successfully",
+        forumId: result.insertedId,
+      });
     });
 
     console.log("Connected to MongoDB!");
