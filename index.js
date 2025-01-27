@@ -296,7 +296,25 @@ async function run() {
         price,
       } = req.body;
 
+      // Input validation
+      if (
+        !paymentIntentId ||
+        !trainer ||
+        !slot ||
+        !plan ||
+        !userName ||
+        !userEmail ||
+        !price
+      ) {
+        return res.status(400).send({
+          success: false,
+          message:
+            "Missing required fields. Please provide all necessary information.",
+        });
+      }
+
       try {
+        // Insert payment data into the database
         const result = await paymentDataCollection.insertOne({
           paymentIntentId,
           trainer,
@@ -305,16 +323,25 @@ async function run() {
           userName,
           userEmail,
           price,
-          date: new Date(),
+          date: new Date(), // Add timestamp for reference
         });
 
-        res.send({
-          success: true,
-          message: "Payment information saved successfully.",
-        });
+        if (result.acknowledged) {
+          res.send({
+            success: true,
+            message: "Payment information saved successfully.",
+          });
+        } else {
+          throw new Error("Failed to save payment information.");
+        }
       } catch (error) {
-        console.error("Error saving payment information:", error);
-        res.status(500).send({ error: error.message });
+        console.error("Error saving payment information:", error.message);
+
+        res.status(500).send({
+          success: false,
+          message: "Internal server error. Unable to save payment information.",
+          error: error.message,
+        });
       }
     });
 
