@@ -12,8 +12,6 @@ import BecomeATrainer from "../Pages/AllTrainers/TrainersDetails/BeATrainer/Beco
 import Payment from "../Pages/AllTrainers/TrainersDetails/TrainerBooking/Payment/Payment";
 import DashBoard from "../Layout/DashBoard";
 import AllClasses from "../Pages/AllClasses/AllClasses";
-import ForumPage from "../Pages/Forum/Forum";
-import VotePost from "../Pages/Forum/Vote/VotePost";
 import AllUsers from "../Pages/DashBoard/AllUsers/AllUsers";
 import AppliedTrainer from "../Pages/DashBoard/AppliedTrainer/AppliedTrainer";
 import ManageSlots from "../Pages/DashBoard/ManageSlots/ManageSlots";
@@ -21,6 +19,7 @@ import AddNewSlot from "../Pages/DashBoard/AddNewSlot/AddNewSlot";
 import AddNewForum from "../Pages/DashBoard/AddNewForum/AddNewForum";
 import AllNewsletterSubscribers from "../Pages/DashBoard/AllNewsletterSubscribers/AllNewsletterSubscribers";
 import AllTrainer from "../Pages/DashBoard/AllTrainer/AllTrainer";
+import ForumPage from "../Pages/Forum/Vote/Forum";
 
 const router = createBrowserRouter([
   {
@@ -42,7 +41,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "/community",
+        path: "/forumPage",
         element: <ForumPage></ForumPage>,
       },
 

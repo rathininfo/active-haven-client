@@ -57,9 +57,9 @@ const Navbar = () => {
             All Classes
           </Link>
           <Link
-            to="/community"
+            to="/forumPage"
             className={`hover:text-red-600 ${
-              location.pathname === "/community" ? "text-red-600" : ""
+              location.pathname === "/forumPage" ? "text-red-600" : ""
             }`}
           >
             Community/Forums

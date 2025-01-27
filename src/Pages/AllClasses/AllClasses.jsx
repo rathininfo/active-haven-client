@@ -6,6 +6,7 @@ const AllClasses = () => {
   const [trainers, setTrainers] = useState([]); // State to store trainers
   const [loading, setLoading] = useState(true); // Loading state
   const [currentPage, setCurrentPage] = useState(1); // Track current page
+  const [searchTerm, setSearchTerm] = useState(""); // State for search term
   const classesPerPage = 6; // Classes per page
   const navigate = useNavigate(); // Initialize useNavigate
 
@@ -35,13 +36,21 @@ const AllClasses = () => {
 
   if (loading) return <p>Loading classes...</p>;
 
+  // Filter classes based on search term (case-insensitive)
+  const filteredClasses = classes.filter((classItem) =>
+    classItem.className.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   // Calculate the classes to display for the current page
   const indexOfLastClass = currentPage * classesPerPage;
   const indexOfFirstClass = indexOfLastClass - classesPerPage;
-  const currentClasses = classes.slice(indexOfFirstClass, indexOfLastClass);
+  const currentClasses = filteredClasses.slice(
+    indexOfFirstClass,
+    indexOfLastClass
+  );
 
   // Handle page navigation
-  const totalPages = Math.ceil(classes.length / classesPerPage);
+  const totalPages = Math.ceil(filteredClasses.length / classesPerPage);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -86,6 +95,15 @@ const AllClasses = () => {
   return (
     <div className="all-classes-section p-6">
       <h1 className="text-3xl font-bold mb-6">All Classes</h1>
+
+      {/* Search Input */}
+      <input
+        type="text"
+        placeholder="Search classes by name"
+        className="mb-6 p-2 border rounded-lg w-full md:w-1/3"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
 
       {/* Display classes */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
