@@ -1,5 +1,4 @@
 import {
-  FaHome,
   FaBook,
   FaUser,
   FaClipboardList,
@@ -16,7 +15,26 @@ const DashBoard = () => {
   const [role, isLoading] = useUserRole(); // Fetch user role dynamically
 
   if (isLoading || authLoading) {
-    return <div className="text-center mt-10">Loading Dashboard...</div>;
+    return <span className="loading loading-spinner loading-lg"></span>;
+  }
+
+  // Role not found fallback
+  if (!role) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-600">
+            No role assigned to your account.
+          </h1>
+          <p className="text-gray-600 mt-2">
+            Please contact support or the admin for further assistance.
+          </p>
+          <NavLink to="/" className="btn btn-primary mt-4">
+            Go to Home
+          </NavLink>
+        </div>
+      </div>
+    );
   }
 
   return (

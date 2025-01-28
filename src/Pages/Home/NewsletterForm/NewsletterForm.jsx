@@ -7,7 +7,7 @@ const NewsletterForm = () => {
   const [error, setError] = useState("");
 
   // Form validation and submission logic
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Simple form validation
@@ -23,11 +23,31 @@ const NewsletterForm = () => {
       return;
     }
 
-    // If all is good, simulate successful submission
-    setError("");
-    setIsSubscribed(true);
-    // Add actual subscription logic here (e.g., submit to an API or Firebase)
-    console.log("Subscribed:", { name, email });
+    try {
+      setError(""); // Clear any previous error
+
+      // Add actual subscription logic here (e.g., submit to an API or Firebase)
+      const response = await fetch("http://localhost:5000/subscriber", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email }), // Send name and email to the database
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to subscribe. Please try again.");
+      }
+
+      const result = await response.json();
+      console.log("Subscription successful:", result);
+
+      // Update state on success
+      setIsSubscribed(true);
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "An error occurred. Please try again.");
+    }
   };
 
   return (
