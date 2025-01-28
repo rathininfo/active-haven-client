@@ -32,6 +32,7 @@ async function run() {
     const allClassesCollection = db.collection("allClasses");
     const allPostCollection = db.collection("forums");
     const allSlotCollection = db.collection("slots");
+    const subscriberCollection = db.collection("subscriberData");
 
     // jwt related api
     app.post("/jwt", async (req, res) => {
@@ -153,6 +154,43 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const result = await userCollection.deleteOne(query);
       res.send(result);
+    });
+
+    app.get("/subscriber", async (req, res) => {
+      const result = await subscriberCollection.find().toArray();
+      res.send(result);
+    });
+
+    app.post("/subscriber", async (req, res) => {
+      try {
+        const { name, email } = req.body;
+
+        if (!name || !email) {
+          return res
+            .status(400)
+            .json({ error: "Name and email are required." });
+        }
+
+        // Create a new subscriber object
+        const newSubscriber = {
+          name,
+          email,
+          subscribedAt: new Date(),
+        };
+
+        // Add the subscriber to the Firestore collection
+        const docRef = await subscriberCollection.insertOne(newSubscriber);
+
+        res.status(201).json({
+          message: "Subscription successful!",
+          id: docRef.id, // Return the document ID
+        });
+      } catch (error) {
+        console.error("Error adding subscriber:", error.message, error.stack);
+        res
+          .status(500)
+          .json({ error: "Failed to add subscriber. Please try again." });
+      }
     });
 
     app.get("/classesInfo", async (req, res) => {
