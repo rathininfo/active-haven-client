@@ -8,7 +8,9 @@ const ManageSlots = () => {
   useEffect(() => {
     const fetchSlots = async () => {
       try {
-        const response = await fetch("http://localhost:5000/addSlot");
+        const response = await fetch(
+          "https://fitness-tracker-server-side-nine.vercel.app/addSlot"
+        );
         const data = await response.json();
         setSlots(data); // Set slots data
         setLoading(false);
@@ -28,9 +30,12 @@ const ManageSlots = () => {
     );
     if (confirmed) {
       try {
-        const response = await fetch(`http://localhost:5000/slots/${slotId}`, {
-          method: "DELETE",
-        });
+        const response = await fetch(
+          `https://fitness-tracker-server-side-nine.vercel.app/slots/${slotId}`,
+          {
+            method: "DELETE",
+          }
+        );
 
         if (response.ok) {
           alert("Slot deleted successfully!");

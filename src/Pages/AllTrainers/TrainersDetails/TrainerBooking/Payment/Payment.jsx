@@ -9,11 +9,11 @@ const stripePromise = loadStripe(import.meta.env.VITE_Payment_Gateway_PK); // Re
 
 const Payment = () => {
   const location = useLocation();
-  const { trainer, slot, plan, price } = location.state || {};
+  const { trainer, slot, plan, price, className } = location.state || {};
   const { user } = useContext(AuthContext);
 
   // If required data is missing
-  if (!trainer || !slot || !plan || !price) {
+  if (!trainer || !slot || !plan || !price || !className) {
     return (
       <p className="text-center text-red-500">
         Invalid payment details. Please go back and try again.
@@ -30,6 +30,9 @@ const Payment = () => {
         </p>
         <p className="text-lg">
           <strong>Slot:</strong> {slot}
+        </p>
+        <p className="text-lg">
+          <strong>Class:</strong> {className}
         </p>
         <p className="text-lg">
           <strong>Package:</strong> {plan}
@@ -52,6 +55,7 @@ const Payment = () => {
           slot={slot}
           plan={plan}
           price={price}
+          className={className}
           userName={user.displayName}
           userEmail={user.email}
         />

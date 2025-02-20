@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 const FeaturedClasses = () => {
   const [classes, setClasses] = useState([]); // Initialize with an empty array
   useEffect(() => {
-    fetch("http://localhost:5000/featuredClasses")
+    fetch("https://fitness-tracker-server-side-nine.vercel.app/trainersInfo")
       .then((res) => res.json())
       .then((data) => setClasses(data));
   }, []);
@@ -22,12 +22,12 @@ const FeaturedClasses = () => {
               className="bg-gray-800 p-6 py-20 px-10 rounded-3xl shadow-md transition-all hover:scale-105 hover:shadow-xl duration-300 ease-in-out"
             >
               <h3 className="text-2xl font-semibold text-gray-100 mb-4">
-                {classItem.title}
+                {classItem.classes}
               </h3>
-              <p className="text-gray-200 mb-4">{classItem.description}</p>
+              <p className="text-gray-200 mb-4">{classItem.classDescription}</p>
               <div className="flex items-center justify-center">
                 <span className="text-lg font-semibold text-red-600 text-center">
-                  Bookings: {classItem.bookings}
+                  Bookings: {classItem.booking}
                 </span>
               </div>
             </div>

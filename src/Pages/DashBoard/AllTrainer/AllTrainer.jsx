@@ -1,108 +1,112 @@
-import React from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import useAxiosSecure from "../../../hooks/useAxiosSecure"; // Custom hook for axios with secure headers
-
-// Function to fetch all trainers
-const fetchTrainers = async (axiosSecure) => {
-  const response = await axiosSecure.get("/trainersInfo");
-  return response.data;
-};
-
-// Function to delete a trainer and change role to "Member"
-const deleteTrainerAndUpdateRole = async (trainerId, axiosSecure) => {
-  // First, update the trainer's role to "Member" before deletion
-  await axiosSecure.put(`/trainersInfo/${trainerId}/updateRole`, {
-    role: "Member",
-  });
-
-  // Then, delete the trainer
-  await axiosSecure.delete(`/trainersInfo/${trainerId}`);
-};
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+import { Helmet } from "react-helmet";
 
 const AllTrainer = () => {
   const axiosSecure = useAxiosSecure();
-  const queryClient = useQueryClient();
 
-  // Fetch trainer applications using useQuery
   const {
-    data: trainerApplications = [],
+    data: users = [],
+    refetch,
     isLoading,
-    isError,
   } = useQuery({
-    queryKey: ["appliedTrainers"],
-    queryFn: () => fetchTrainers(axiosSecure),
-    onError: (error) => {
-      console.error("Error fetching trainers:", error);
+    queryKey: ["users"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/users");
+      return res.data;
     },
   });
 
-  // Mutation hook for deleting a trainer
-  const { mutate: removeTrainer, isLoading: isDeleting } = useMutation({
-    mutationFn: (trainerId) =>
-      deleteTrainerAndUpdateRole(trainerId, axiosSecure),
-    onSuccess: () => {
-      // Invalidate the query to refetch the trainer list after deletion
-      queryClient.invalidateQueries(["appliedTrainers"]);
-      alert("Trainer deleted and role updated to Member.");
-    },
-    onError: (error) => {
-      console.error("Error deleting trainer:", error);
-      alert("Failed to delete the trainer. Please try again.");
-    },
-  });
-
-  // Handler for delete button click
-  const handleDeleteTrainer = async (trainerId) => {
-    try {
-      console.log("Deleting trainer with ID:", trainerId); // Debugging log
-
-      const response = await axiosSecure.put(
-        `/trainersInfo/${trainerId}/updateRole`,
-        {
-          role: "Member", // Role to change
+  // Handle role change to 'Member' (when admin removes trainer role)
+  const handleRemoveTrainer = (user) => {
+    axiosSecure
+      .patch(`/users/role/${user._id}`, { role: "member" })
+      .then((res) => {
+        if (res.data.modifiedCount > 0) {
+          // Role change was successful
+          refetch();
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: `${user.name} is now a Member.`,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } else {
+          // No modifications were made (something might be wrong)
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "There was an issue updating the role.",
+          });
         }
-      );
-
-      console.log("Response:", response.data);
-      refetch(); // Refresh the trainer list
-    } catch (error) {
-      console.error("Error deleting trainer:", error); // Log the error details
-    }
+      })
+      .catch((error) => {
+        console.error("Error updating role:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to remove trainer role.",
+        });
+      });
   };
-  // Loader or error handling
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error fetching trainers</div>;
+
+  if (isLoading) {
+    return <div className="text-center text-xl">Loading trainers...</div>;
+  }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold">All Trainers</h1>
-      <table className="table-auto w-full border-collapse border mt-4">
-        <thead>
-          <tr>
-            <th className="border p-2">Name</th>
-            <th className="border p-2">Specialization</th>
-            <th className="border p-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {trainerApplications.map((trainer) => (
-            <tr key={trainer._id}>
-              <td className="border p-2">{trainer.name}</td>
-              <td className="border p-2">{trainer.specialization}</td>
-              <td className="border p-2">
-                <button
-                  onClick={() => handleDeleteTrainer(trainer._id)}
-                  className="bg-red-500 text-white py-1 px-3 rounded"
-                  disabled={isDeleting}
-                >
-                  {isDeleting ? "Deleting..." : "Delete"}
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <Helmet>
+        <title>Active Haven | All Trainers</title>
+      </Helmet>
+      <div>
+        <div className="flex justify-evenly my-4">
+          <h1 className="text-3xl">All Trainers</h1>
+          <h1 className="text-3xl">
+            Total Trainers:{" "}
+            {users.filter((user) => user.role === "trainer").length}
+          </h1>
+        </div>
+        <div>
+          <div className="overflow-x-auto">
+            <table className="table table-zebra">
+              {/* Table Head */}
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users
+                  .filter((user) => user.role === "trainer") // Only show trainers
+                  .map((user, index) => (
+                    <tr key={user._id}>
+                      <th>{index + 1}</th>
+                      <td>{user.name}</td>
+                      <td>{user.email}</td>
+                      <td>{user.role}</td>
+                      <td>
+                        <button
+                          onClick={() => handleRemoveTrainer(user)}
+                          className="btn btn-warning btn-sm"
+                        >
+                          Remove Trainer
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 

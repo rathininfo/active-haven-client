@@ -27,13 +27,16 @@ const NewsletterForm = () => {
       setError(""); // Clear any previous error
 
       // Add actual subscription logic here (e.g., submit to an API or Firebase)
-      const response = await fetch("http://localhost:5000/subscriber", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email }), // Send name and email to the database
-      });
+      const response = await fetch(
+        "https://fitness-tracker-server-side-nine.vercel.app/subscriber",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, email }), // Send name and email to the database
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to subscribe. Please try again.");

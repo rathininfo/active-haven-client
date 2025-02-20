@@ -9,7 +9,9 @@ const AllNewsletterSubscribers = () => {
     // Fetch subscriber data
     const fetchSubscribers = async () => {
       try {
-        const response = await fetch("http://localhost:5000/subscriber");
+        const response = await fetch(
+          "https://fitness-tracker-server-side-nine.vercel.app/subscriber"
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch subscribers.");
         }

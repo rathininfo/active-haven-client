@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
 
 const axiosSecure = axios.create({
-  baseURL: "http://localhost:5000", // Replace with your backend's actual URL
+  baseURL: "https://fitness-tracker-server-side-nine.vercel.app", // Replace with your backend's actual URL
   headers: {
     "Content-Type": "application/json",
   },

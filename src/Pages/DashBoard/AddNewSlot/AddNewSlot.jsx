@@ -16,12 +16,12 @@ const AddNewSlot = () => {
     const fetchData = async () => {
       try {
         const trainerResponse = await fetch(
-          "http://localhost:5000/trainersInfo"
+          "https://fitness-tracker-server-side-nine.vercel.app/trainersInfo"
         );
         const trainerData = await trainerResponse.json();
 
         const classesResponse = await fetch(
-          "http://localhost:5000/classesInfo"
+          "https://fitness-tracker-server-side-nine.vercel.app/classesInfo"
         );
         const classesData = await classesResponse.json();
 
@@ -68,11 +68,14 @@ const AddNewSlot = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/addSlot", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newSlotData),
-      });
+      const response = await fetch(
+        "https://fitness-tracker-server-side-nine.vercel.app/addSlot",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newSlotData),
+        }
+      );
 
       if (response.ok) {
         Swal.fire({

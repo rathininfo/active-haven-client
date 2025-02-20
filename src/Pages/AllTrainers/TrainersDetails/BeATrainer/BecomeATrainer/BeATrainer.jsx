@@ -1,17 +1,20 @@
 import React, { useState, useContext } from "react";
 import Select from "react-select";
+import Swal from "sweetalert2"; // Import SweetAlert2
 import { AuthContext } from "../../../../../Providers/AuthProvider";
 
 const BeATrainer = () => {
-  const { user } = useContext(AuthContext); // Assuming you're using a user context to fetch user data
+  const { user } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     name: "",
-    email: user?.email || "", // Read-only email from context
+    email: user?.email || "",
     age: "",
     profileImage: "",
     specialization: "",
+    booking: 0,
+    classDescription: "",
     availableDays: [],
-    availableSlots: [], // This will now hold an array of selected time slots
+    availableSlots: [],
     bio: "",
     yearsOfExperience: 0,
     socialLinks: {
@@ -19,7 +22,7 @@ const BeATrainer = () => {
       instagram: "",
     },
     additionalInfo: "",
-    status: "pending",
+    status: "Pending",
   });
 
   // Options for React Select
@@ -50,16 +53,53 @@ const BeATrainer = () => {
     "Strength Training",
   ];
 
+  const classOptions = [
+    "Zen Fusion",
+    "Fitness Fiesta",
+    "Body Blast",
+    "Sweat & Shine",
+    "Rhythm Revolution",
+    "Core Fusion",
+    "Pilates Powerhouse",
+    "Circuit Fusion",
+    "Kickboxing Cardio",
+    "High-intensity interval training (HIIT)",
+    "Flex & Flow",
+    "Spin & Sculpt",
+    "Power Sculpt",
+    "Warrior Workout",
+    "Dance Cardio Party",
+    "Booty Bootcamp",
+    "Bounce & Burn",
+    "Mindful Movement",
+    "Strength & Grace",
+    "HIIT Hype",
+    "Box & Burn",
+    "TRX Total Body",
+    "Strong Nation",
+  ];
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleChangeClass = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleSkillsChange = (specialization) => {
-    // Only store the last selected specialization as a string
     setFormData((prev) => ({
       ...prev,
-      specialization: specialization, // Update specialization with a single string value
+      specialization: specialization,
+    }));
+  };
+
+  const handleClassesChange = (className) => {
+    setFormData((prev) => ({
+      ...prev,
+      className: className,
     }));
   };
 
@@ -71,7 +111,6 @@ const BeATrainer = () => {
   };
 
   const handleAvailableSlotsChange = (selectedOptions) => {
-    // Convert selected time slots to an array and update availableSlots
     setFormData((prev) => ({
       ...prev,
       availableSlots: selectedOptions.map((option) => option.value),
@@ -88,16 +127,25 @@ const BeATrainer = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/trainersInfo", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "https://fitness-tracker-server-side-nine.vercel.app/trainersInfo",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (response.ok) {
-        console.log("Trainer application submitted!");
+        Swal.fire({
+          icon: "success",
+          title: "Application Submitted!",
+          text: "Your application is now pending approval.",
+          confirmButtonColor: "#3085d6",
+        });
+
         // Clear the form after submission
         setFormData({
           name: "",
@@ -105,6 +153,9 @@ const BeATrainer = () => {
           age: "",
           profileImage: "",
           specialization: "",
+          offerClasses: "",
+          booking: 0,
+          classDescription: "",
           availableDays: [],
           availableSlots: [],
           bio: "",
@@ -114,13 +165,23 @@ const BeATrainer = () => {
             instagram: "",
           },
           additionalInfo: "",
-          status: "pending",
+          status: "Pending",
         });
       } else {
-        console.error("Error submitting application:", response.statusText);
+        Swal.fire({
+          icon: "error",
+          title: "Submission Failed",
+          text: "There was an error submitting your application. Please try again.",
+          confirmButtonColor: "#d33",
+        });
       }
     } catch (error) {
-      console.error("Error submitting application: ", error);
+      Swal.fire({
+        icon: "error",
+        title: "Network Error",
+        text: "Could not connect to the server. Please check your internet connection and try again.",
+        confirmButtonColor: "#d33",
+      });
     }
   };
 
@@ -211,6 +272,7 @@ const BeATrainer = () => {
           placeholder="https://instagram.com/your-profile"
         />
       </div>
+
       <div>
         <label>Skills:</label>
         <div className="grid grid-cols-2 gap-2">
@@ -218,8 +280,8 @@ const BeATrainer = () => {
             <label key={specialization} className="flex items-center space-x-2">
               <input
                 type="checkbox"
-                checked={formData.specialization === specialization} // Check if it's the selected specialization
-                onChange={() => handleSkillsChange(specialization)} // Update with a single string
+                checked={formData.specialization === specialization}
+                onChange={() => handleSkillsChange(specialization)}
                 className="w-4 h-4"
               />
               <span>{specialization}</span>
@@ -227,6 +289,35 @@ const BeATrainer = () => {
           ))}
         </div>
       </div>
+
+      <div>
+        <label>Classes:</label>
+        <div className="grid grid-cols-2 gap-2">
+          {classOptions.map((className) => (
+            <label key={className} className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={formData.className === className}
+                onChange={() => handleClassesChange(className)}
+                className="w-4 h-4"
+              />
+              <span>{className}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <label>Class Description:</label>
+        <textarea
+          name="classDescription"
+          value={formData.classDescription}
+          onChange={handleChangeClass}
+          className="w-full border p-2 rounded"
+          required
+        />
+      </div>
+
       <div>
         <label>Available Days:</label>
         <Select

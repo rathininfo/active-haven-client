@@ -30,21 +30,24 @@ const AddNewForum = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/forums", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          content,
-          author: {
-            name: user.displayName,
-            role: role,
+      const response = await fetch(
+        "https://fitness-tracker-server-side-nine.vercel.app/forums",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-          createdAt: new Date().toISOString(),
-        }),
-      });
+          body: JSON.stringify({
+            title,
+            content,
+            author: {
+              name: user.displayName,
+              role: role,
+            },
+            createdAt: new Date().toISOString(),
+          }),
+        }
+      );
 
       if (response) {
         toast.success("Forum added successfully!");

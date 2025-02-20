@@ -22,19 +22,19 @@ const Navbar = () => {
 
   return (
     <nav className="bg-gray-900 text-white shadow-md sticky top-0 z-50">
-      <div className="container mx-auto px-6 md:px-16 lg:px-20 py-4 flex justify-between items-center">
+      <div className="container mx-auto px-6 md:px-16 lg:px-20 flex justify-between items-center py-4">
         {/* Website Logo */}
-        <div className="flex items-center space-x-3 w-20">
+        <div className="flex items-center space-x-3 w-16">
           <Link to="/" className="text-2xl font-bold">
-            <img className="" src={logo} alt="" />
+            <img className="w-8 h-8" src={logo} alt="" />
           </Link>
         </div>
 
         {/* Navbar Links (Desktop) */}
-        <div className="hidden md:flex space-x-6">
+        <div className="hidden md:flex space-x-6 justify-center items-center">
           <Link
             to="/"
-            className={`hover:text-red-600 ${
+            className={`hover:text-red-600  ${
               location.pathname === "/" ? "text-red-600" : ""
             }`}
           >
@@ -86,7 +86,7 @@ const Navbar = () => {
               </div>
               <button
                 onClick={handleLogout}
-                className="text-sm text-red-600 hover:text-red-500"
+                className=" text-red-600 hover:text-red-500 font-bold" 
               >
                 Logout
               </button>

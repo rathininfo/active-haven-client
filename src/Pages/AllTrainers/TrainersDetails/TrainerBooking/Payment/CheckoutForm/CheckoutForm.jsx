@@ -3,10 +3,19 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import useAxiosSecure from "../../../../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 
-const CheckoutForm = ({ trainer, slot, plan, price, userName, userEmail }) => {
+const CheckoutForm = ({
+  trainer,
+  slot,
+  plan,
+  price,
+  userName,
+  userEmail,
+  className,
+}) => {
   const [clientSecret, setClientSecret] = useState("");
   const [processing, setProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [paymentInProgress, setPaymentInProgress] = useState(false); // Prevent double payment
   const stripe = useStripe();
   const elements = useElements();
   const axiosSecure = useAxiosSecure();
@@ -34,6 +43,17 @@ const CheckoutForm = ({ trainer, slot, plan, price, userName, userEmail }) => {
       return;
     }
 
+    // Prevent double payment
+    if (paymentInProgress) {
+      Swal.fire({
+        title: "Double Payment Attempt Detected",
+        text: "Your payment is already being processed. Please wait until the current transaction completes.",
+        icon: "warning",
+      });
+      return;
+    }
+
+    setPaymentInProgress(true); // Set payment in progress to true
     setProcessing(true);
     setErrorMessage("");
 
@@ -46,6 +66,7 @@ const CheckoutForm = ({ trainer, slot, plan, price, userName, userEmail }) => {
       if (error) {
         setErrorMessage(error.message);
         setProcessing(false);
+        setPaymentInProgress(false); // Reset paymentInProgress on error
         return;
       }
 
@@ -57,6 +78,7 @@ const CheckoutForm = ({ trainer, slot, plan, price, userName, userEmail }) => {
       if (paymentError) {
         setErrorMessage(paymentError.message);
         setProcessing(false);
+        setPaymentInProgress(false); // Reset paymentInProgress on error
         return;
       }
 
@@ -64,6 +86,7 @@ const CheckoutForm = ({ trainer, slot, plan, price, userName, userEmail }) => {
         paymentIntentId: paymentIntent.id,
         trainer,
         slot,
+        className,
         plan,
         price,
         userName,
@@ -72,17 +95,29 @@ const CheckoutForm = ({ trainer, slot, plan, price, userName, userEmail }) => {
 
       Swal.fire({
         title: "Payment SuccessFully",
-        text: "You clicked the button!",
+        text: "Your payment was successful! Thank you for booking with us.",
         icon: "success",
       });
+
+      // Clear the card information after successful payment
+      card.clear(); // This will reset the card input fields
     } catch (err) {
       setErrorMessage(err.message);
     } finally {
       setProcessing(false);
+      setPaymentInProgress(false); // Reset paymentInProgress after the transaction
     }
   };
 
-  if (!trainer || !slot || !plan || !price || !userName || !userEmail) {
+  if (
+    !trainer ||
+    !slot ||
+    !className ||
+    !plan ||
+    !price ||
+    !userName ||
+    !userEmail
+  ) {
     return <p className="text-red-500">Required data is missing.</p>;
   }
 

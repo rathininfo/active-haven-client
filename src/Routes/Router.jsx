@@ -20,6 +20,11 @@ import AddNewForum from "../Pages/DashBoard/AddNewForum/AddNewForum";
 import AllNewsletterSubscribers from "../Pages/DashBoard/AllNewsletterSubscribers/AllNewsletterSubscribers";
 import AllTrainer from "../Pages/DashBoard/AllTrainer/AllTrainer";
 import ForumPage from "../Pages/Forum/Vote/Forum";
+import Profile from "../Pages/DashBoard/Profile/Profile";
+import ActivityLog from "../Pages/Forum/Vote/ActivityLog/ActivityLog";
+import BookedTrainer from "../Pages/DashBoard/BookedTrainer/BookedTrainer";
+import Balance from "../Pages/DashBoard/Balance/Balance";
+import AddClass from "../Pages/DashBoard/AddClass/AddClass";
 
 const router = createBrowserRouter([
   {
@@ -49,7 +54,9 @@ const router = createBrowserRouter([
         path: "/trainerDetails/:id",
         element: <TrainersDetails></TrainersDetails>,
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/trainersInfo/${params.id}`),
+          fetch(
+            `https://fitness-tracker-server-side-nine.vercel.app/trainersInfo/${params.id}`
+          ),
       },
 
       {
@@ -109,24 +116,26 @@ const router = createBrowserRouter([
         path: "applied-trainer",
         element: <AppliedTrainer></AppliedTrainer>,
       },
-      {
-        path: "balance",
-        element: <h1>Balanced</h1>,
-      },
-      {
-        path: "add-new-class",
-        element: <h1>Add New class</h1>,
-      },
 
       {
         path: "allUsers",
         element: <AllUsers></AllUsers>,
       },
 
+      {
+        path: "/dashboard/balance",
+        element: <Balance></Balance>,
+      },
+
+      {
+        path: "/dashboard/addClasses",
+        element: <AddClass></AddClass>,
+      },
+
       // trainer routes
       {
-        path: "manage-slots",
-        element: <ManageSlots></ManageSlots>,
+        path: "/dashboard/addClasses",
+        element: <AddClass></AddClass>,
       },
 
       {
@@ -137,6 +146,20 @@ const router = createBrowserRouter([
       {
         path: "add-new-forum",
         element: <AddNewForum></AddNewForum>,
+      },
+
+      {
+        path: "/dashboard/profile",
+        element: <Profile></Profile>,
+      },
+
+      {
+        path: "/dashboard/activity-log",
+        element: <ActivityLog></ActivityLog>,
+      },
+      {
+        path: "/dashboard/booked-trainer",
+        element: <BookedTrainer></BookedTrainer>,
       },
     ],
   },

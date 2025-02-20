@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaCrown } from "react-icons/fa"; // Importing crown icon for badges
 import useAuth from "../../../hooks/useAuth";
+import { Helmet } from "react-helmet";
 
 const ForumPage = () => {
   const [posts, setPosts] = useState([]); // Ensure this is initialized as an empty array
@@ -14,7 +15,9 @@ const ForumPage = () => {
     const fetchPosts = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:5000/forums`);
+        const response = await fetch(
+          `https://fitness-tracker-server-side-nine.vercel.app/forums`
+        );
         const data = await response.json();
         console.log(data); // Log the fetched data
         setPosts(data); // Ensure data.posts is always an array
@@ -70,7 +73,7 @@ const ForumPage = () => {
     try {
       // Send the upvote request to the server
       const response = await fetch(
-        `http://localhost:5000/forums/upvote`, // Ensure this is the correct API endpoint
+        `https://fitness-tracker-server-side-nine.vercel.app/forums/upvote`, // Ensure this is the correct API endpoint
         {
           method: "POST",
           headers: {
@@ -114,7 +117,7 @@ const ForumPage = () => {
     try {
       // Send the downvote request to the server (assuming you have an API endpoint to handle this)
       const response = await fetch(
-        `http://localhost:5000/forums/downvote/${postId}`,
+        `https://fitness-tracker-server-side-nine.vercel.app/forums/downvote/${postId}`,
         {
           method: "POST",
           headers: {
@@ -138,88 +141,94 @@ const ForumPage = () => {
   };
 
   return (
-    <div className="forum-page container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Forum</h1>
+    <>
+      <Helmet>
+        <title>Active Haven | Forum</title>
+      </Helmet>
 
-      {/* Post List */}
-      {loading ? (
-        <p>Loading posts...</p>
-      ) : (
-        <div>
-          {Array.isArray(posts) && posts.length > 0 ? (
-            currentPosts.map((post) => (
-              <div
-                key={post._id}
-                className="post-item p-4 mb-4 border rounded-lg shadow-md"
-              >
-                <h2 className="text-xl font-semibold">{post.title}</h2>
-                <p>{post.content}</p>
-                <div className="flex justify-between items-center mt-4">
-                  {/* Check if post.author exists before rendering */}
-                  <span className="flex items-center">
-                    Posted by {post.author ? post.author.name : "Unknown"}{" "}
-                    {/* Display author's name */}
-                    {post.author && renderAuthorBadge(post.author.role)}{" "}
-                    {/* Display badge for admin/trainer */}
-                  </span>
-                  <div className="votes flex gap-4">
-                    <button
-                      className="btn"
-                      onClick={() => handleUpvote(post._id)}
-                    >
-                      <span>Upvotes {post.upvotes}</span>
-                    </button>
-                    <button
-                      className="btn"
-                      onClick={() => handleDownvote(post._id)}
-                    >
-                      <span>Downvotes {post.downvotes}</span>
-                    </button>
+      <div className="forum-page container mx-auto p-6">
+        <h1 className="text-3xl font-bold mb-6">Forum</h1>
+
+        {/* Post List */}
+        {loading ? (
+          <p>Loading posts...</p>
+        ) : (
+          <div>
+            {Array.isArray(posts) && posts.length > 0 ? (
+              currentPosts.map((post) => (
+                <div
+                  key={post._id}
+                  className="post-item p-4 mb-4 border rounded-lg shadow-md"
+                >
+                  <h2 className="text-xl font-semibold">{post.title}</h2>
+                  <p>{post.content}</p>
+                  <div className="flex justify-between items-center mt-4">
+                    {/* Check if post.author exists before rendering */}
+                    <span className="flex items-center">
+                      Posted by {post.author ? post.author.name : "Unknown"}{" "}
+                      {/* Display author's name */}
+                      {post.author && renderAuthorBadge(post.author.role)}{" "}
+                      {/* Display badge for admin/trainer */}
+                    </span>
+                    <div className="votes flex gap-4">
+                      <button
+                        className="btn"
+                        onClick={() => handleUpvote(post._id)}
+                      >
+                        <span>Upvotes {post.upvotes}</span>
+                      </button>
+                      <button
+                        className="btn"
+                        onClick={() => handleDownvote(post._id)}
+                      >
+                        <span>Downvotes {post.downvotes}</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
-          ) : (
-            <p>No posts available</p> // Handle case where no posts are available
-          )}
+              ))
+            ) : (
+              <p>No posts available</p> // Handle case where no posts are available
+            )}
 
-          {/* Pagination Controls */}
-          <div className="pagination mt-4 flex justify-center gap-2">
-            <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              className="btn px-4 py-2 bg-gray-300"
-              disabled={currentPage === 1}
-            >
-              Prev
-            </button>
-
-            {Array.from({ length: totalPages }, (_, index) => (
+            {/* Pagination Controls */}
+            <div className="pagination mt-4 flex justify-center gap-2">
               <button
-                key={index + 1}
-                onClick={() => paginate(index + 1)}
-                className={`btn px-4 py-2 ${
-                  currentPage === index + 1
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200"
-                }`}
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                className="btn px-4 py-2 bg-gray-300"
+                disabled={currentPage === 1}
               >
-                {index + 1}
+                Prev
               </button>
-            ))}
 
-            <button
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-              }
-              className="btn px-4 py-2 bg-gray-300"
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index + 1}
+                  onClick={() => paginate(index + 1)}
+                  className={`btn px-4 py-2 ${
+                    currentPage === index + 1
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-200"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                className="btn px-4 py-2 bg-gray-300"
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 };
 

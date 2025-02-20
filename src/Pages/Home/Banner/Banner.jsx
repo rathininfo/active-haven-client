@@ -1,9 +1,15 @@
 import React from "react";
 import { Carousel } from "react-responsive-carousel";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const Banner = () => {
+  const navigate = useNavigate();
+
+  const explorClasses = () => {
+    navigate("/allClasses");
+  };
+
   return (
     <div className="relative">
       <Carousel showThumbs={false} autoPlay infiniteLoop>
@@ -21,13 +27,15 @@ const Banner = () => {
             <p className="mt-4 text-lg md:text-xl">
               Push harder than yesterday if you want a different tomorrow.
             </p>
-            <Link to="/classes">
-              <button className="mt-6 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300">
-                Explore Classes
-              </button>
-            </Link>
+            <button
+              onClick={explorClasses}
+              className="mt-6 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300"
+            >
+              Explore Classes
+            </button>
           </div>
         </div>
+
         {/* Slide 2 */}
         <div className="relative">
           <img
@@ -40,13 +48,15 @@ const Banner = () => {
             <p className="mt-4 text-lg md:text-xl">
               Your only limit is you. Break through.
             </p>
-            <Link to="/classes">
-              <button className="mt-6 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300">
-                Explore Classes
-              </button>
-            </Link>
+            <button
+              onClick={explorClasses}
+              className="mt-6 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300"
+            >
+              Explore Classes
+            </button>
           </div>
         </div>
+
         {/* Slide 3 */}
         <div className="relative">
           <img
@@ -59,13 +69,15 @@ const Banner = () => {
             <p className="mt-4 text-lg md:text-xl">
               Consistency is key to progress. Stay committed!
             </p>
-            <Link to="/classes">
-              <button className="mt-6 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300">
-                Explore Classes
-              </button>
-            </Link>
+            <button
+              onClick={explorClasses}
+              className="mt-6 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300"
+            >
+              Explore Classes
+            </button>
           </div>
         </div>
+
         {/* Slide 4 */}
         <div className="relative">
           <img
@@ -80,13 +92,15 @@ const Banner = () => {
             <p className="mt-4 text-lg md:text-xl">
               Eat clean, train hard, live well.
             </p>
-            <Link to="/classes">
-              <button className="mt-6 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300">
-                Explore Classes
-              </button>
-            </Link>
+            <button
+              onClick={explorClasses}
+              className="mt-6 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300"
+            >
+              Explore Classes
+            </button>
           </div>
         </div>
+
         {/* Slide 5 */}
         <div className="relative">
           <img
@@ -101,17 +115,19 @@ const Banner = () => {
             <p className="mt-4 text-lg md:text-xl">
               Dream it. Believe it. Achieve it.
             </p>
-            <Link to="/classes">
-              <button className="mt-6 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300">
-                Explore Classes
-              </button>
-            </Link>
+            <button
+              onClick={explorClasses}
+              className="mt-6 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300"
+            >
+              Explore Classes
+            </button>
           </div>
         </div>
+
         {/* Slide 6 */}
         <div className="relative">
           <img
-            src="https://i.ibb.co.com/X89p0Gm/sven-mieke-Euw-D039-Svug-unsplash.jpg"
+            src="https://i.ibb.co/X89p0Gm/sven-mieke-Euw-D039-Svug-unsplash.jpg"
             alt="Workout Motivation"
             className="w-full h-[600px] object-cover"
           />
@@ -120,11 +136,12 @@ const Banner = () => {
             <p className="mt-4 text-lg md:text-xl">
               Every workout counts toward your goal.
             </p>
-            <Link to="/classes">
-              <button className="mt-6 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300">
-                Explore Classes
-              </button>
-            </Link>
+            <button
+              onClick={explorClasses}
+              className="mt-6 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300"
+            >
+              Explore Classes
+            </button>
           </div>
         </div>
       </Carousel>

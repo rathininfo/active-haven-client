@@ -10,7 +10,7 @@ const Testimonials = () => {
   const [reviews, setReviews] = useState([]); // Initialize as an empty array
 
   useEffect(() => {
-    fetch("http://localhost:5000/reviews")
+    fetch("https://fitness-tracker-server-side-nine.vercel.app/reviews")
       .then((res) => res.json())
       .then((data) => setReviews(data));
   }, []);
@@ -44,7 +44,7 @@ const Testimonials = () => {
                   {review.name}
                 </h3>
                 <p className="text-gray-600 text-center mt-2">
-                  {review.review}
+                  {review.feedback}
                 </p>
 
                 <div className="flex justify-center py-4">
