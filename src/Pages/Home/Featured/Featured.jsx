@@ -40,7 +40,7 @@ const Featured = () => {
 
   return (
     <section className="bg-gray-100 py-12">
-      <div className="container mx-auto px-6 text-center">
+     <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-16 xl:px-20 text-center">
         <h2 className="text-4xl font-bold mb-8 text-gray-800">
           Why Choose Us?
         </h2>
