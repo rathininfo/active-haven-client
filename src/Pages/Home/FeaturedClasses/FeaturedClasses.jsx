@@ -10,7 +10,7 @@ const FeaturedClasses = () => {
 
   return (
     <section className="bg-white py-20">
-      <div className="container mx-auto px-6 text-center">
+      <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-16 xl:px-20 text-center">
         <h2 className="text-5xl font-semibold text-gray-800 mb-12 tracking-tight">
           Featured Classes
         </h2>
