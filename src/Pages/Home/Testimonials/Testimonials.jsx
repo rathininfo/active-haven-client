@@ -44,7 +44,7 @@ const Testimonials = () => {
                   {review.name}
                 </h3>
                 <p className="text-gray-600 text-center mt-2">
-                  {review.feedback}
+                  {review.review}
                 </p>
 
                 <div className="flex justify-center py-4">
