@@ -5,7 +5,8 @@ import {
   FaUsers,
   FaPlusSquare,
   FaChalkboardTeacher,
-  FaBalanceScale
+  FaBalanceScale,
+  FaChartLine
 } from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
 import useUserRole from "../hooks/useUserRole";
@@ -123,6 +124,11 @@ const DashBoard = () => {
               <li>
                 <NavLink to="/dashboard/profile" className="flex items-center gap-2 p-3 rounded hover:bg-gray-700 transition">
                   <FaUser /> Profile
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/overview" className="flex items-center gap-2 p-3 rounded hover:bg-gray-700 transition">
+                  <FaChartLine /> Overview
                 </NavLink>
               </li>
               <li>
