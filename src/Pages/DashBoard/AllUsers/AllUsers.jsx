@@ -60,7 +60,7 @@ const AllUsers = () => {
   };
 
   if (isLoading) {
-    return <div className="text-center text-xl">Loading users...</div>;
+    return <div className="text-center text-xl"><span className="loading loading-spinner loading-xs"></span></div>;
   }
 
   return (

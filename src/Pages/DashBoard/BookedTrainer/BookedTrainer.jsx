@@ -66,7 +66,7 @@ const BookedTrainer = () => {
     return (
       <div className="flex flex-col items-center justify-center space-y-2">
         <div className="border-4 border-t-4 border-gray-200 border-t-blue-500 w-16 h-16 rounded-full animate-spin"></div>
-        <p className="text-lg text-gray-500">Loading...</p>
+        <p className="text-lg text-gray-500"><span className="loading loading-spinner loading-xs"></span></p>
       </div>
     );
   }

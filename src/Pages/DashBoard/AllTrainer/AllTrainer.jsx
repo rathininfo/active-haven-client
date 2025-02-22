@@ -53,7 +53,7 @@ const AllTrainer = () => {
   };
 
   if (isLoading) {
-    return <div className="text-center text-xl">Loading trainers...</div>;
+    return <div className="text-center text-xl"><span className="loading loading-spinner loading-xs"></span></div>;
   }
 
   return (

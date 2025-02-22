@@ -78,7 +78,7 @@ const AppliedTrainer = () => {
   };
 
   if (isLoading) {
-    return <div>Loading trainer applications...</div>;
+    return <div><span className="loading loading-spinner loading-xs"></span></div>;
   }
 
   return (

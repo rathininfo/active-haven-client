@@ -51,7 +51,7 @@ const ManageSlots = () => {
   };
 
   if (loading) {
-    return <div className="text-center text-lg font-semibold">Loading...</div>;
+    return <div className="text-center text-lg font-semibold"><span className="loading loading-spinner loading-xs"></span></div>;
   }
 
   return (

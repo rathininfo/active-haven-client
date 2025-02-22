@@ -29,7 +29,7 @@ const AllNewsletterSubscribers = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div><span className="loading loading-spinner loading-xs"></span></div>;
   }
 
   if (error) {

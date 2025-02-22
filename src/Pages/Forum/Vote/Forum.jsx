@@ -151,7 +151,7 @@ const ForumPage = () => {
 
         {/* Post List */}
         {loading ? (
-          <p>Loading posts...</p>
+          <p><span className="loading loading-spinner loading-xs"></span></p>
         ) : (
           <div>
             {Array.isArray(posts) && posts.length > 0 ? (
