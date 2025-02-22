@@ -21,7 +21,7 @@ const Testimonials = () => {
         <h1 className="font-medium text-5xl">Our Client Reviews</h1>
       </div>
 
-      <div className="py-10">
+      <div className="py-10 px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20">
         <Swiper
           slidesPerView={3}
           spaceBetween={30}
@@ -30,11 +30,11 @@ const Testimonials = () => {
             clickable: true,
           }}
           modules={[Pagination]}
-          className="mySwiper"
+          className="mySwiper "
         >
           {reviews.map((review, index) => (
             <SwiperSlide key={index}>
-              <div className="bg-white p-6 rounded-lg shadow-lg">
+              <div className="bg-white p-6 rounded-lg shadow-lg py-10">
                 <img
                   src={review.image}
                   alt={review.name}

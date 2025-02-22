@@ -55,10 +55,10 @@ const Featured = () => {
                 alt={feature.title}
                 className="w-16 h-16 mb-4 bg-red-600 p-4 rounded-full"
               />
-              <h3 className="text-xl font-semibold text-gray-200 mb-2">
+              <h3 className="text-2xl font-semibold text-gray-200 mb-2">
                 {feature.title}
               </h3>
-              <p className="text-gray-100">{feature.description}</p>
+              <p className="text-gray-300 text-base">{feature.description}</p>
             </div>
           ))}
         </div>

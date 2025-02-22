@@ -12,7 +12,7 @@ const Footer = () => {
             <div className="flex items-center space-x-3 mb-4 w-24">
               <img src={logo} alt="" />
             </div>
-            <p className="text-sm leading-relaxed">
+            <p className="text-sm text-gray-300 leading-relaxed">
               Our company is at the forefront of revolutionizing the fitness
               industry. Combining cutting-edge technology with a passion for
               fitness, we empower individuals to lead healthier, active
@@ -39,22 +39,22 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">HOME</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/collections" className="hover:text-red-600">
+                <Link to="/collections" className="hover:text-red-600 text-gray-300">
                   Collections
                 </Link>
               </li>
               <li>
-                <Link to="/new-item" className="hover:text-red-600">
+                <Link to="/new-item" className="hover:text-red-600 text-gray-300">
                   New Item
                 </Link>
               </li>
               <li>
-                <Link to="/latest" className="hover:text-red-600">
+                <Link to="/latest" className="hover:text-red-600 text-gray-300">
                   Latest
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="hover:text-red-600">
+                <Link to="/services" className="hover:text-red-600 text-gray-300">
                   Services
                 </Link>
               </li>
@@ -65,17 +65,17 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">PRODUCTS</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/new-arrival" className="hover:text-red-600">
+                <Link to="/new-arrival" className="hover:text-red-600 text-gray-300">
                   New Arrival
                 </Link>
               </li>
               <li>
-                <Link to="/oldest" className="hover:text-red-600">
+                <Link to="/oldest" className="hover:text-red-600 text-gray-300">
                   Oldest
                 </Link>
               </li>
               <li>
-                <Link to="/premium" className="hover:text-red-600">
+                <Link to="/premium" className="hover:text-red-600 text-gray-300">
                   Premium
                 </Link>
               </li>
@@ -86,22 +86,22 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">ABOUT US</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/contact-form" className="hover:text-red-600">
+                <Link to="/contact-form" className="hover:text-red-600 text-gray-300">
                   Contact Form
                 </Link>
               </li>
               <li>
-                <Link to="/email-us" className="hover:text-red-600">
+                <Link to="/email-us" className="hover:text-red-600 text-gray-300">
                   Email Us
                 </Link>
               </li>
               <li>
-                <Link to="/number" className="hover:text-red-600">
+                <Link to="/number" className="hover:text-red-600 text-gray-300">
                   Number
                 </Link>
               </li>
               <li>
-                <Link to="/customers-feedback" className="hover:text-red-600">
+                <Link to="/customers-feedback" className="hover:text-red-600 text-gray-300">
                   Customers Feedback
                 </Link>
               </li>

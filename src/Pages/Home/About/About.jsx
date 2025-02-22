@@ -15,18 +15,18 @@ const About = () => {
           <h2 className="text-4xl font-semibold text-gray-100 mb-6 leading-tight">
             About Us
           </h2>
-          <p className="text-xl text-gray-200 mb-6">
+          <p className="text-base text-gray-300 mb-6">
             We are a team of passionate professionals committed to helping you
             achieve your fitness goals. With years of experience in personalized
             training, expert coaching, and holistic fitness strategies, we are
             here to guide and motivate you at every step of your journey.
           </p>
-          <p className="text-xl text-gray-200 mb-6">
+          <p className="text-base text-gray-300 mb-6">
             Our mission is to create a community of individuals who not only
             seek fitness but a healthier and more balanced lifestyle. We offer
             personalized plans that are designed to suit your unique needs.
           </p>
-          <p className="text-xl text-gray-200 mb-6">
+          <p className="text-base text-gray-300 mb-6">
             Join us today and start your journey towards becoming the best
             version of yourself.
           </p>

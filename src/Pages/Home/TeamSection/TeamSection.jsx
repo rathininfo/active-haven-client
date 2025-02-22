@@ -24,7 +24,7 @@ const TeamSection = () => {
   ];
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 bg-gray-50 px-4 sm:px-6 md:px-10 lg:px-16 xl:px-20">
       <div className="text-center mb-12">
         <h2 className="text-4xl font-semibold">Meet Our Trainers</h2>
         <p className="text-lg text-gray-700 mt-2">
